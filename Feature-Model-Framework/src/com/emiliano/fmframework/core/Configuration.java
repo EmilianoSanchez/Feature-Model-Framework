@@ -77,6 +77,10 @@ public class Configuration implements Cloneable {
 		return states.get(featureName);
 	}
 	
+	public FeatureState getFeatureState(Feature feature) {
+		return this.getFeatureState(feature.getName());
+	}
+	
 	public boolean isFeatureSelected(String featureName) {
 		FeatureState state=this.getFeatureState(featureName);
 		if(state!=null && state==FeatureState.SELECTED)

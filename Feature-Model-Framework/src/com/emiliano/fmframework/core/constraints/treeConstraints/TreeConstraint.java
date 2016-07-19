@@ -20,4 +20,9 @@ public abstract class TreeConstraint extends Constraint {
 		return this.children;
 	}
 
+	public abstract TreeConstraintType getType();
+	
+	public static enum TreeConstraintType{
+		MANDATORY, OPTIONAL, ALTERNATIVE_GROUP, OR_GROUP
+	}
 }

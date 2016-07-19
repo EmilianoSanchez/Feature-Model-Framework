@@ -25,4 +25,9 @@ public class AlternativeGroup extends TreeConstraint {
 		orGroup.generateClauses(clauses);
 	}
 
+	@Override
+	public TreeConstraintType getType() {
+		return TreeConstraintType.ALTERNATIVE_GROUP;
+	}
+
 }

@@ -3,6 +3,7 @@ package com.emiliano.fmframework.core.constraints.treeConstraints;
 import java.util.Set;
 
 import com.emiliano.fmframework.core.constraints.Clause;
+import com.emiliano.fmframework.core.constraints.treeConstraints.TreeConstraint.TreeConstraintType;
 
 public class OrGroup extends TreeConstraint {
 
@@ -24,4 +25,8 @@ public class OrGroup extends TreeConstraint {
 		clauses.add(clause1);
 	}
 
+	@Override
+	public TreeConstraintType getType() {
+		return TreeConstraintType.OR_GROUP;
+	}
 }

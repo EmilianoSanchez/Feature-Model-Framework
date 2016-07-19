@@ -6,21 +6,18 @@ import com.emiliano.fmframework.core.Configuration;
 import com.emiliano.fmframework.core.FeatureState;
 import com.emiliano.fmframework.core.constraints.IConstraint;
 import com.emiliano.fmframework.reasoning.ConfOperations;
-import com.emiliano.fmframework.reasoning.csa.inequalityRestrictions.NoRestriction;
 import com.emiliano.fmframework.reasoning.csa.strategies.Container;
 import com.emiliano.fmframework.reasoning.csa.strategies.PriorityQueue;
 import com.emiliano.fmframework.reasoning.csa.strategies.PriorityStack;
 import com.emiliano.fmframework.reasoning.csa.strategies.Queue;
+import com.emiliano.fmframework.reasoning.csa.strategies.SearchStrategy;
 import com.emiliano.fmframework.reasoning.csa.strategies.Stack;
 import com.emiliano.fmframework.reasoning.csa.variableOrderingHeuristic.FirstUnassignedVariableSelector;
 import com.emiliano.fmframework.reasoning.csa.variableOrderingHeuristic.UnassignedVariableSelector;
+import com.emiliano.fmframework.reasoning.inequalityRestrictions.NoRestriction;
 import com.emiliano.fmframework.reasoning.objectiveFunctions.ObjectiveFunction;
 
 public class ConfigurationSelectionAlgorithm {
-
-	public enum SearchStrategy {
-		DepthFirstSearch, BreadthFirstSearch, GreedyBestFirstSearch, BestFirstSearchStar
-	}
 
 	public static enum HeuristicFunction {
 		HeuristicA, HeuristicB
@@ -46,19 +43,7 @@ public class ConfigurationSelectionAlgorithm {
 
 	public ConfigurationSelectionAlgorithm(SearchStrategy strategy, ObjectiveFunction heuristic,
 			UnassignedVariableSelector unassignedVariableSelector, IConstraint restriction) {
-		switch (strategy) {
-		case DepthFirstSearch:
-			this.open = new Stack<State>();
-			break;
-		case BreadthFirstSearch:
-			this.open = new Queue<State>();
-			break;
-		case BestFirstSearchStar:
-			this.open = new PriorityQueue<State>();
-			break;
-		case GreedyBestFirstSearch:
-			this.open = new PriorityStack<State>();
-		}
+		this.open=strategy.container;
 		this.heuristic = heuristic;
 		this.unassignedVariableSelector = unassignedVariableSelector;
 		this.restriction = restriction;
@@ -68,25 +53,7 @@ public class ConfigurationSelectionAlgorithm {
 		this(SearchStrategy.GreedyBestFirstSearch, function, constraint);
 	}
 
-	protected static class State implements Comparable<State> {
-		public Configuration conf;
-		public Double value;
 
-		public State(Configuration conf, Double value) {
-			this.conf = conf;
-			this.value = value;
-		}
-
-		@Override
-		public int compareTo(State other) {
-			if (this.value < other.value)
-				return -1;
-			else if (this.value > other.value)
-				return 1;
-			else
-				return 0;
-		}
-	}
 
 	protected Container<State> open;
 	protected ObjectiveFunction heuristic;

@@ -1,8 +1,8 @@
-package com.emiliano.fmframework.reasoning.csa.inequalityRestrictions;
+package com.emiliano.fmframework.reasoning.inequalityRestrictions;
 
 import com.emiliano.fmframework.core.Configuration;
 import com.emiliano.fmframework.core.constraints.IConstraint;
-import com.emiliano.fmframework.reasoning.objectiveFunctions.AdditionFunction;
+import com.emiliano.fmframework.reasoning.objectiveFunctions.AdditionObjective;
 import com.emiliano.fmframework.reasoning.objectiveFunctions.ObjectiveFunction;
 
 public class SingleInequalityRestriction implements IConstraint {
@@ -11,7 +11,7 @@ public class SingleInequalityRestriction implements IConstraint {
 	private double limit;
 
 	public SingleInequalityRestriction(String attributeSelected, String attributeDeselected, double limit) {
-		this(new AdditionFunction(attributeSelected, attributeDeselected), limit);
+		this(new AdditionObjective(attributeSelected, attributeDeselected), limit);
 	};
 
 	public SingleInequalityRestriction(ObjectiveFunction function, double limit) {

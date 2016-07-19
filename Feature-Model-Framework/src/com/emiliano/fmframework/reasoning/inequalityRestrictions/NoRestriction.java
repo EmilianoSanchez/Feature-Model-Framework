@@ -1,4 +1,4 @@
-package com.emiliano.fmframework.reasoning.csa.inequalityRestrictions;
+package com.emiliano.fmframework.reasoning.inequalityRestrictions;
 
 import com.emiliano.fmframework.core.Configuration;
 import com.emiliano.fmframework.core.constraints.IConstraint;

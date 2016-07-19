@@ -1,4 +1,4 @@
-package com.emiliano.fmframework.reasoning.csa.inequalityRestrictions;
+package com.emiliano.fmframework.reasoning.inequalityRestrictions;
 
 import java.util.LinkedList;
 import java.util.List;

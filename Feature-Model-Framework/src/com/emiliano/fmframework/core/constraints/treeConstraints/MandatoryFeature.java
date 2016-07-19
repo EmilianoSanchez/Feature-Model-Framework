@@ -3,6 +3,7 @@ package com.emiliano.fmframework.core.constraints.treeConstraints;
 import java.util.Set;
 
 import com.emiliano.fmframework.core.constraints.Clause;
+import com.emiliano.fmframework.core.constraints.treeConstraints.TreeConstraint.TreeConstraintType;
 
 public class MandatoryFeature extends TreeConstraint {
 
@@ -23,4 +24,12 @@ public class MandatoryFeature extends TreeConstraint {
 		clauses.add(clause);
 	}
 
+	@Override
+	public TreeConstraintType getType() {
+		return TreeConstraintType.MANDATORY;
+	}
+	
+	public String getChild(){
+		return this.children[0];
+	}
 }
