@@ -22,19 +22,6 @@ public class Feature {
 	/** The attributes. */
 	private Map<String, Object> attributes;
 
-	/** The feature action. */
-	private FeatureAction action;
-
-	/**
-	 * Instantiates a new feature.
-	 *
-	 * @param name
-	 *            the feature name
-	 */
-	public Feature(String name) {
-		this(name, null);
-	}
-
 	/**
 	 * Instantiates a new feature with an action.
 	 *
@@ -43,10 +30,9 @@ public class Feature {
 	 * @param action
 	 *            the feature action
 	 */
-	public Feature(String name, FeatureAction action) {
+	public Feature(String name) {
 		this.name = name;
 		this.attributes = new HashMap<String, Object>();
-		this.action = action;
 	}
 
 	/**
@@ -69,36 +55,6 @@ public class Feature {
 	}
 
 	/**
-	 * Gets the feature action.
-	 *
-	 * @return the action
-	 */
-	public FeatureAction getAction() {
-		return action;
-	}
-
-	/**
-	 * Sets the feature action.
-	 *
-	 * @param action
-	 *            the new action
-	 */
-	public void setAction(FeatureAction action) {
-		this.action = action;
-	}
-
-	/**
-	 * Checks if it is an abstract feature, i.e. it does not contain a feature
-	 * action.
-	 *
-	 * @return true, if it is an abstract feature, or false, if it is a concrete
-	 *         feature.
-	 */
-	public boolean isAbstractFeature() {
-		return this.action == null;
-	}
-
-	/**
 	 * Contains attribute.
 	 *
 	 * @param name
@@ -118,7 +74,7 @@ public class Feature {
 	 *            the value
 	 * @return the object
 	 */
-	public Object putAttribute(String name, Object value) {
+	public Object addAttribute(String name, Object value) {
 		return this.attributes.put(name, value);
 	}
 
@@ -153,41 +109,4 @@ public class Feature {
 		return this.attributes.entrySet();
 	}
 
-	/**
-	 * Apply action.
-	 *
-	 * @param softElement
-	 *            the soft element
-	 * @return the soft element
-	 */
-	public Object applyAction(Object softElement) {
-		if (this.action != null)
-			return this.action.applyAction(softElement);
-		else
-			return softElement;
-	}
-
-	/**
-	 * Disapply action.
-	 *
-	 * @param softElement
-	 *            the soft element
-	 * @return the soft element
-	 */
-	public Object disapplyAction(Object softElement) {
-		if (this.action != null)
-			return this.action.disapplyAction(softElement);
-		else
-			return softElement;
-	}
-
-	// private FeatureModel model;
-	//
-	// public FeatureModel getFeatureModel() {
-	// return model;
-	// }
-	//
-	// public void setFeatureModel(FeatureModel model) {
-	// this.model=model;
-	// }
 }

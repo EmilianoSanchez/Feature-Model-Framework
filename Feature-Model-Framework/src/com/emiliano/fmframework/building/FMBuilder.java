@@ -4,11 +4,10 @@ import java.util.Arrays;
 import java.util.Vector;
 
 import com.emiliano.fmframework.core.Feature;
-import com.emiliano.fmframework.core.FeatureAction;
 import com.emiliano.fmframework.core.FeatureModel;
 import com.emiliano.fmframework.core.FeatureModelImpl;
+import com.emiliano.fmframework.core.constraints.AssignedValue;
 import com.emiliano.fmframework.core.constraints.Constraint;
-import com.emiliano.fmframework.core.constraints.crossTreeConstraints.LogicExpressionConstraint;
 import com.emiliano.fmframework.core.constraints.treeConstraints.AlternativeGroup;
 import com.emiliano.fmframework.core.constraints.treeConstraints.MandatoryFeature;
 import com.emiliano.fmframework.core.constraints.treeConstraints.OptionalFeature;
@@ -37,20 +36,15 @@ public class FMBuilder {
 		return new FMBuilder(name);
 	}
 
-	public static FMBuilder createFMBuilder(String name, FeatureAction action) {
-		return new FMBuilder(name, action);
-	}
-
 	public FMBuilder(String name) {
 		this.feature = new Feature(name);
 		this.treeConstraints = new Vector<TreeConstraint>();
 		this.subBuilders = new Vector<FMBuilder>();
 	}
-
-	public FMBuilder(String name, FeatureAction action) {
-		this.feature = new Feature(name, action);
-		this.treeConstraints = new Vector<TreeConstraint>();
-		this.subBuilders = new Vector<FMBuilder>();
+	
+	public FMBuilder addAttribute(String name, Object value){
+		this.feature.addAttribute(name, value);
+		return this;
 	}
 
 	public FMBuilder addOptionalFeature(FMBuilder builder) {
@@ -114,17 +108,14 @@ public class FMBuilder {
 		this.getTreeConstraints(treeConstraints);
 		for (TreeConstraint treeConstraint : treeConstraints)
 			model.addTreeConstraint(treeConstraint);
+		//Root constraint:
+		model.addCrossTreeConstraint(new AssignedValue(this.feature.getName(), true));
 		return model;
 	}
 
 	public FMCTCBuilder addCrossTreeConstraint(Constraint constraint) {
 		FeatureModel model = this.buildModel();
 		return new FMCTCBuilder(model, constraint);
-	}
-
-	public FMCTCBuilder addCrossTreeConstraint(String expression) {
-		LogicExpressionConstraint constraint = new LogicExpressionConstraint(expression);
-		return this.addCrossTreeConstraint(constraint);
 	}
 
 	public static class FMCTCBuilder {
@@ -137,11 +128,6 @@ public class FMBuilder {
 
 		public FMCTCBuilder addCrossTreeConstraint(Constraint constraint) {
 			return new FMCTCBuilder(model, constraint);
-		}
-
-		public FMCTCBuilder addCrossTreeConstraint(String expression) {
-			LogicExpressionConstraint constraint = new LogicExpressionConstraint(expression);
-			return this.addCrossTreeConstraint(constraint);
 		}
 
 		public FeatureModel buildModel() {

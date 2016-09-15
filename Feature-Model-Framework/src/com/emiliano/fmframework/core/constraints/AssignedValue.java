@@ -19,4 +19,11 @@ public class AssignedValue extends Constraint {
 		clauses.add(aux);
 	}
 
+	@Override
+	public String toString() {
+		if(this.selected)
+			return '"' + this.feature + "\"=SELECTED";
+		else
+			return '"' + this.feature + "\"=DESELECTED";
+	}
 }
