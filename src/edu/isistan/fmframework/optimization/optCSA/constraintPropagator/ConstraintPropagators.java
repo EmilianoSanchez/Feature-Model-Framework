@@ -1,0 +1,6 @@
+package edu.isistan.fmframework.optimization.optCSA.constraintPropagator;
+
+public class ConstraintPropagators {
+	public static ClauseBasedConstraintPropagator clauseBasedConstraintPropagator=new ClauseBasedConstraintPropagator();
+	public static CardinalityBasedConstraintPropagator cardinalityBasedConstraintPropagator=new CardinalityBasedConstraintPropagator();
+}

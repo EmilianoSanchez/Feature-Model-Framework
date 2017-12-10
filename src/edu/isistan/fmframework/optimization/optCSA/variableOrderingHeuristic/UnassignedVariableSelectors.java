@@ -1,0 +1,9 @@
+package edu.isistan.fmframework.optimization.optCSA.variableOrderingHeuristic;
+
+public class UnassignedVariableSelectors {
+	public static TopDownUnassignedVariableSelector topDownUnassignedVariableSelector=new TopDownUnassignedVariableSelector();
+	public static BottomUpUnassignedVariableSelector bottomUpUnassignedVariableSelector=new BottomUpUnassignedVariableSelector();
+	public static ValuePerWeightUnassignedVariableSelector valuePerWeightUnassignedVariableSelector=new ValuePerWeightUnassignedVariableSelector();
+	public static MaximaxUVS maximaxUVS=new MaximaxUVS();
+	public static StaticMostConstrained staticMostConstrained=new StaticMostConstrained();
+}
