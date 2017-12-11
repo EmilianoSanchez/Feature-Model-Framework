@@ -19,6 +19,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="libs/javailp-1.2a.jar"/>
 	<classpathentry kind="lib" path="libs/sxfm.jar"/>
-	<classpathentry kind="lib" path="C:/Programacion/glpk-4.61/w64/glpk-java.jar"/>
+	<classpathentry kind="lib" path="libs/glpk-java.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

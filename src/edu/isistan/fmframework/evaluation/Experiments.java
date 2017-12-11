@@ -23,8 +23,8 @@ import fm.FeatureModelException;
 public class Experiments {
 
 	public static void main(String[] args) throws IOException, FeatureModelException {
-//		experiment1();
-//		experiment2();
+		experiment1();
+		experiment2();
 		experiment3();
 	}
 
