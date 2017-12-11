@@ -1,10 +1,10 @@
-package edu.isistan.fmframework.optimization.optCSA.variableOrderingHeuristic;
+package edu.isistan.fmframework.optimization.optCSA.variableSelectors;
 
 import edu.isistan.fmframework.core.Configuration;
 import edu.isistan.fmframework.core.FeatureState;
 import edu.isistan.fmframework.optimization.Problem;
 
-public class TopDownUnassignedVariableSelector implements UnassignedVariableSelector<Problem<?,?>>{
+public class TopDown implements VariableSelector<Problem<?,?>>{
 
 	
 	@Override

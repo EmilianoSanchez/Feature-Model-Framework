@@ -8,7 +8,7 @@ import edu.isistan.fmframework.optimization.optCSA.constraintPropagator.Constrai
 import edu.isistan.fmframework.optimization.optCSA.containers.Container;
 import edu.isistan.fmframework.optimization.optCSA.containers.PriorityStack;
 import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicFunction;
-import edu.isistan.fmframework.optimization.optCSA.variableOrderingHeuristic.UnassignedVariableSelector;
+import edu.isistan.fmframework.optimization.optCSA.variableSelectors.VariableSelector;
 
 public class CSABacktracking extends CSAalgorithm {
 
@@ -25,7 +25,7 @@ public class CSABacktracking extends CSAalgorithm {
 			while (!this.open.isEmpty()) {
 				Configuration current = this.open.pop().conf;
 				int unassignedVariable = unassignedVariableSelector.selectUnassignedVariable(current);
-				if (unassignedVariable == UnassignedVariableSelector.NO_UNASSIGNED_VARIABLES) {
+				if (unassignedVariable == VariableSelector.NO_UNASSIGNED_VARIABLES) {
 					// System.out.println("Open states "+openStates);
 					return current;
 				} else {
@@ -56,13 +56,13 @@ public class CSABacktracking extends CSAalgorithm {
 		super(new PriorityStack<State>(), heuristic);
 	}
 	
-	public CSABacktracking(UnassignedVariableSelector<Problem<?, ?>> unassignedVariableSelector) {
+	public CSABacktracking(VariableSelector<Problem<?, ?>> unassignedVariableSelector) {
 		super(new PriorityStack<State>(), unassignedVariableSelector);
 	}
 	
 
 	public CSABacktracking(HeuristicFunction heuristic,
-			UnassignedVariableSelector<Problem<?, ?>> unassignedVariableSelector) {
+			VariableSelector<Problem<?, ?>> unassignedVariableSelector) {
 		super(new PriorityStack<State>(), heuristic, unassignedVariableSelector);
 	}
 	
@@ -74,17 +74,17 @@ public class CSABacktracking extends CSAalgorithm {
 		super(container, heuristic);
 	}
 	
-	public CSABacktracking(Container<State> container,UnassignedVariableSelector unassignedVariableSelector) {
+	public CSABacktracking(Container<State> container,VariableSelector unassignedVariableSelector) {
 		super(container, unassignedVariableSelector);
 	}
 
 	protected CSABacktracking(Container<State> container,HeuristicFunction heuristic,
-			UnassignedVariableSelector<Problem<?, ?>> unassignedVariableSelector) {
+			VariableSelector<Problem<?, ?>> unassignedVariableSelector) {
 		super(container, heuristic ,unassignedVariableSelector);
 	}
 	
 	protected CSABacktracking(Container<State> container,HeuristicFunction heuristic,
-			UnassignedVariableSelector<Problem<?, ?>> unassignedVariableSelector, ConstraintPropagator constraintPropagator) {
+			VariableSelector<Problem<?, ?>> unassignedVariableSelector, ConstraintPropagator constraintPropagator) {
 		super(container, heuristic,unassignedVariableSelector,constraintPropagator);
 	}
 	

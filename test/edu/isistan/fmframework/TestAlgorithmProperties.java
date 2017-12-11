@@ -9,8 +9,8 @@ import org.junit.Test;
 
 import edu.isistan.fmframework.core.Configuration;
 import edu.isistan.fmframework.core.FeatureModel;
-import edu.isistan.fmframework.io.ProblemGenerator;
-import edu.isistan.fmframework.io.SPLOTRepository;
+import edu.isistan.fmframework.evaluation.BasicProblemGenerator;
+import edu.isistan.fmframework.evaluation.SPLOTModels;
 import edu.isistan.fmframework.optimization.Algorithm;
 import edu.isistan.fmframework.optimization.BasicProblem;
 import edu.isistan.fmframework.optimization.opt01LP.Java01LPalgorithm;
@@ -19,7 +19,7 @@ import edu.isistan.fmframework.optimization.optCSA.constraintPropagator.Constrai
 import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicA;
 import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicB;
 import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.Heuristics;
-import edu.isistan.fmframework.optimization.optCSA.variableOrderingHeuristic.UnassignedVariableSelectors;
+import edu.isistan.fmframework.optimization.optCSA.variableSelectors.VariableSelectors;
 import edu.isistan.fmframework.optimization.optSAT.JavaSAT01LPalgorithm;
 import fm.FeatureModelException;
 
@@ -29,16 +29,16 @@ public class TestAlgorithmProperties {
 	public void testExactVsAproxAlgorithms() throws FeatureModelException {
 		
 		Algorithm<BasicProblem> exactAlgorithms[] = new Algorithm[] {
-				new Java01LPalgorithm(Java01LPalgorithm.ILPSolver.SAT4J), 
-				new JavaSAT01LPalgorithm(JavaSAT01LPalgorithm.ILPSolver.SAT4J), 
-				CSAalgorithm.build(CSAalgorithm.Strategy.BestFS, Heuristics.heuristicB,UnassignedVariableSelectors.maximaxUVS),
-				CSAalgorithm.build(CSAalgorithm.Strategy.BandB, Heuristics.heuristicB,UnassignedVariableSelectors.maximaxUVS)
+				new Java01LPalgorithm(), 
+				new JavaSAT01LPalgorithm(), 
+				CSAalgorithm.build(CSAalgorithm.Strategy.BestFS, Heuristics.heuristicB,VariableSelectors.maxHeuristicValueVariableSelector),
+				CSAalgorithm.build(CSAalgorithm.Strategy.BandB, Heuristics.heuristicB,VariableSelectors.maxHeuristicValueVariableSelector)
 		};
 		CSAalgorithm approxAlgorithmHB = CSAalgorithm.build(CSAalgorithm.Strategy.BT, new HeuristicB());
 		CSAalgorithm approxAlgorithmHA = CSAalgorithm.build(CSAalgorithm.Strategy.BT, new HeuristicA());
 
-		List<FeatureModel> models = SPLOTRepository.getModels(0, 882);
-		List<BasicProblem> instances=ProblemGenerator.generateValidBasicProblems(models,0);
+		List<FeatureModel> models = SPLOTModels.getModels(0, 882);
+		List<BasicProblem> instances=BasicProblemGenerator.generateValidBasicProblemInstances(models,0);
 		
 		int count = 0;
 		int counts[] = new int[3];
@@ -94,8 +94,8 @@ public class TestAlgorithmProperties {
 		HeuristicB heuristicB = new HeuristicB();
 		HeuristicA heuristicA = new HeuristicA();
 		
-		List<FeatureModel> models = SPLOTRepository.getModels(0, 882);
-		List<BasicProblem> instances=ProblemGenerator.generateValidBasicProblems(models,0);
+		List<FeatureModel> models = SPLOTModels.getModels(0, 882);
+		List<BasicProblem> instances=BasicProblemGenerator.generateValidBasicProblemInstances(models,0);
 		
 		int count = 0;
 //		int counts[] = new int[3];

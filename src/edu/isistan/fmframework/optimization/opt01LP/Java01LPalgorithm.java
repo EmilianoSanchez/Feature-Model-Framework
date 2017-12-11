@@ -24,6 +24,7 @@ public class Java01LPalgorithm implements BasicAlgorithm {
 
 	SolverFactory factory;
 	ILPSolver ilpsolver;
+	OptType optType;
 
 	// Usar SAT4J, porque GLPK usa librerias nativas, lo que no es justo contra
 	// nuestro algoritmo Java
@@ -32,10 +33,18 @@ public class Java01LPalgorithm implements BasicAlgorithm {
 	}
 
 	public Java01LPalgorithm() {
-		this(ILPSolver.SAT4J);
+		this(OptType.MAX,ILPSolver.SAT4J);
+	}
+	
+	public Java01LPalgorithm(OptType optType) {
+		this(optType,ILPSolver.SAT4J);
 	}
 
 	public Java01LPalgorithm(ILPSolver ilpsolver) {
+		this(OptType.MAX,ilpsolver);
+	}
+	
+	public Java01LPalgorithm(OptType optType,ILPSolver ilpsolver) {
 		this.ilpsolver = ilpsolver;
 		switch (ilpsolver) {
 		case SAT4J:
@@ -43,9 +52,8 @@ public class Java01LPalgorithm implements BasicAlgorithm {
 		case GLPK:
 			factory = new SolverFactoryGLPK();
 		}
-		factory.setParameter(Solver.VERBOSE, 0);
-		// factory.setParameter(Solver.TIMEOUT, 100); // set timeout to 100
-		// seconds
+		this.factory.setParameter(Solver.VERBOSE, 0);
+		this.optType = optType;
 	}
 
 	Problem problem;
@@ -174,7 +182,7 @@ public class Java01LPalgorithm implements BasicAlgorithm {
 			linear.add((long) (instance.objectiveFunctions[0].attributes[i] * MULTIPLIER), i);
 			problem.setVarType(i, Boolean.class);
 		}
-		problem.setObjective(linear, OptType.MAX);
+		problem.setObjective(linear, optType);
 		return problem;
 	}
 

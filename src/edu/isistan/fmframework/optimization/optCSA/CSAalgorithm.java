@@ -11,8 +11,8 @@ import edu.isistan.fmframework.optimization.optCSA.searchStrategies.CSABacktrack
 import edu.isistan.fmframework.optimization.optCSA.searchStrategies.CSABestFirstSearch;
 import edu.isistan.fmframework.optimization.optCSA.searchStrategies.CSABranchAndBound;
 import edu.isistan.fmframework.optimization.optCSA.searchStrategies.State;
-import edu.isistan.fmframework.optimization.optCSA.variableOrderingHeuristic.UnassignedVariableSelector;
-import edu.isistan.fmframework.optimization.optCSA.variableOrderingHeuristic.UnassignedVariableSelectors;
+import edu.isistan.fmframework.optimization.optCSA.variableSelectors.VariableSelectors;
+import edu.isistan.fmframework.optimization.optCSA.variableSelectors.VariableSelector;
 
 public abstract class CSAalgorithm implements Algorithm<Problem<?, ?>> {
 
@@ -21,19 +21,19 @@ public abstract class CSAalgorithm implements Algorithm<Problem<?, ?>> {
 	}
 
 	public static CSAalgorithm build(Strategy strategy) {
-		return build(strategy, Heuristics.heuristicB, UnassignedVariableSelectors.staticMostConstrained);
+		return build(strategy, Heuristics.heuristicB, VariableSelectors.mostConstrainedFeatureVariableSelector);
 	}
 
 	public static CSAalgorithm build(Strategy strategy, HeuristicFunction heuristic) {
-		return build(strategy, heuristic, UnassignedVariableSelectors.staticMostConstrained);
+		return build(strategy, heuristic, VariableSelectors.mostConstrainedFeatureVariableSelector);
 	}
 	
-	public static CSAalgorithm build(Strategy strategy, UnassignedVariableSelector<Problem<?, ?>> unassignedVariableSelector){
+	public static CSAalgorithm build(Strategy strategy, VariableSelector<Problem<?, ?>> unassignedVariableSelector){
 		return build(strategy, Heuristics.heuristicB, unassignedVariableSelector);
 	}
 
 	public static CSAalgorithm build(Strategy strategy, HeuristicFunction heuristic,
-			UnassignedVariableSelector<Problem<?, ?>> unassignedVariableSelector) {
+			VariableSelector<Problem<?, ?>> unassignedVariableSelector) {
 		switch (strategy) {
 		case BT:
 			return new CSABacktracking(heuristic, unassignedVariableSelector);
@@ -50,20 +50,20 @@ public abstract class CSAalgorithm implements Algorithm<Problem<?, ?>> {
 	}
 
 	protected CSAalgorithm(Container<State> container, HeuristicFunction heuristic) {
-		this(container, heuristic, UnassignedVariableSelectors.topDownUnassignedVariableSelector);
+		this(container, heuristic, VariableSelectors.topDownVariableSelector);
 	}
 	
-	public CSAalgorithm(Container<State> container, UnassignedVariableSelector<Problem<?, ?>> unassignedVariableSelector) {
+	public CSAalgorithm(Container<State> container, VariableSelector<Problem<?, ?>> unassignedVariableSelector) {
 		this(container, Heuristics.heuristicB, unassignedVariableSelector);
 	}
 
 	protected CSAalgorithm(Container<State> container, HeuristicFunction heuristic,
-			UnassignedVariableSelector<Problem<?, ?>> unassignedVariableSelector) {
+			VariableSelector<Problem<?, ?>> unassignedVariableSelector) {
 		this(container, heuristic, unassignedVariableSelector, ConstraintPropagators.clauseBasedConstraintPropagator);
 	}
 
 	protected CSAalgorithm(Container<State> container, HeuristicFunction heuristic,
-			UnassignedVariableSelector<Problem<?, ?>> unassignedVariableSelector, ConstraintPropagator cpropagator) {
+			VariableSelector<Problem<?, ?>> unassignedVariableSelector, ConstraintPropagator cpropagator) {
 		this.open = container;
 		this.cpropagator = cpropagator;
 		this.heuristic = heuristic;
@@ -78,7 +78,7 @@ public abstract class CSAalgorithm implements Algorithm<Problem<?, ?>> {
 		this.heuristic = heuristic;
 	}
 
-	public void setUnassignedVariableSelector(UnassignedVariableSelector<Problem<?, ?>> unassignedVariableSelector) {
+	public void setUnassignedVariableSelector(VariableSelector<Problem<?, ?>> unassignedVariableSelector) {
 		this.unassignedVariableSelector = unassignedVariableSelector;
 	}
 
@@ -88,7 +88,7 @@ public abstract class CSAalgorithm implements Algorithm<Problem<?, ?>> {
 
 	protected Container<State> open;
 	protected HeuristicFunction heuristic;
-	protected UnassignedVariableSelector<Problem<?, ?>> unassignedVariableSelector;
+	protected VariableSelector<Problem<?, ?>> unassignedVariableSelector;
 	protected ConstraintPropagator cpropagator;
 
 	@Override

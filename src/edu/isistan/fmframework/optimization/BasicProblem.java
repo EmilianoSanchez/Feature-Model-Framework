@@ -18,4 +18,11 @@ public class BasicProblem extends Problem<InequalityRestriction, AdditionObjecti
 		super(model);
 		this.objectiveFunctions = new AdditionObjective[] { objective };
 	}
+	
+	public BasicProblem(FeatureModel model, AdditionObjective objective,
+			InequalityRestriction[] restrictions) {
+		super(model);
+		this.objectiveFunctions = new AdditionObjective[] { objective };
+		this.globalConstraints = restrictions;
+	}
 }

@@ -10,7 +10,7 @@ import edu.isistan.fmframework.optimization.optCSA.constraintPropagator.Constrai
 import edu.isistan.fmframework.optimization.optCSA.containers.Container;
 import edu.isistan.fmframework.optimization.optCSA.containers.PriorityStack;
 import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicFunction;
-import edu.isistan.fmframework.optimization.optCSA.variableOrderingHeuristic.UnassignedVariableSelector;
+import edu.isistan.fmframework.optimization.optCSA.variableSelectors.VariableSelector;
 
 public class CSABranchAndBound extends CSAalgorithm {
 
@@ -31,7 +31,7 @@ public class CSABranchAndBound extends CSAalgorithm {
 				State current = this.open.pop();
 				if (current.value < upperBound) {
 					int unassignedVariable = unassignedVariableSelector.selectUnassignedVariable(current.conf);
-					if (unassignedVariable == UnassignedVariableSelector.NO_UNASSIGNED_VARIABLES) {
+					if (unassignedVariable == VariableSelector.NO_UNASSIGNED_VARIABLES) {
 						solution = current.conf;
 						upperBound = current.value;
 					} else {
@@ -68,11 +68,11 @@ public class CSABranchAndBound extends CSAalgorithm {
 	}
 
 	public CSABranchAndBound(HeuristicFunction heuristic,
-			UnassignedVariableSelector unassignedVariableSelector) {
+			VariableSelector unassignedVariableSelector) {
 		super(new PriorityStack<State>(), heuristic, unassignedVariableSelector);
 	}
 	
-	public CSABranchAndBound(UnassignedVariableSelector unassignedVariableSelector) {
+	public CSABranchAndBound(VariableSelector unassignedVariableSelector) {
 		super(new PriorityStack<State>(), unassignedVariableSelector);
 	}
 	
@@ -85,12 +85,12 @@ public class CSABranchAndBound extends CSAalgorithm {
 	}
 
 	protected CSABranchAndBound(Container<State> container,HeuristicFunction heuristic,
-			UnassignedVariableSelector<Problem<?, ?>> unassignedVariableSelector) {
+			VariableSelector<Problem<?, ?>> unassignedVariableSelector) {
 		super(container, heuristic ,unassignedVariableSelector);
 	}
 	
 	protected CSABranchAndBound(Container<State> container,HeuristicFunction heuristic,
-			UnassignedVariableSelector<Problem<?, ?>> unassignedVariableSelector, ConstraintPropagator constraintPropagator) {
+			VariableSelector<Problem<?, ?>> unassignedVariableSelector, ConstraintPropagator constraintPropagator) {
 		super(container, heuristic,unassignedVariableSelector,constraintPropagator);
 	}
 	

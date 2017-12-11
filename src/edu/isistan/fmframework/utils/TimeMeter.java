@@ -174,8 +174,8 @@ public class TimeMeter {
         MILLI("ms", 1000000),
         SECOND("s", 1000000000);
 
-        String unit;
-        long divider;
+    	public final String unit;
+        public final long divider;
 
         Precision(String unit, long divider) {
             this.unit = unit;

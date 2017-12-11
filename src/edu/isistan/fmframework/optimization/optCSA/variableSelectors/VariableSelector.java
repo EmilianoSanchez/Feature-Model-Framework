@@ -1,9 +1,9 @@
-package edu.isistan.fmframework.optimization.optCSA.variableOrderingHeuristic;
+package edu.isistan.fmframework.optimization.optCSA.variableSelectors;
 
 import edu.isistan.fmframework.core.Configuration;
 import edu.isistan.fmframework.optimization.Problem;
 
-public interface UnassignedVariableSelector<P extends Problem<?,?>> {
+public interface VariableSelector<P extends Problem<?,?>> {
 
 	public int NO_UNASSIGNED_VARIABLES = -1;
 

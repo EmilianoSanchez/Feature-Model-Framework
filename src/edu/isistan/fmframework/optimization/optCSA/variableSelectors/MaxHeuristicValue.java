@@ -1,4 +1,4 @@
-package edu.isistan.fmframework.optimization.optCSA.variableOrderingHeuristic;
+package edu.isistan.fmframework.optimization.optCSA.variableSelectors;
 
 import java.util.AbstractMap;
 import java.util.Comparator;
@@ -13,15 +13,15 @@ import edu.isistan.fmframework.optimization.optCSA.constraintPropagator.Constrai
 import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicB;
 import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicFunction;
 
-public class MaximaxUVS implements UnassignedVariableSelector<Problem<?, ?>> {
+public class MaxHeuristicValue implements VariableSelector<Problem<?, ?>> {
 
 	private HeuristicFunction<Problem<?, ?>> heuristic;
 	private ClauseBasedConstraintPropagator cpropagator;
 
-	public MaximaxUVS(){
+	public MaxHeuristicValue(){
 		this(new HeuristicB());
 	}
-	public MaximaxUVS(HeuristicFunction<Problem<?, ?>> heuristic){
+	public MaxHeuristicValue(HeuristicFunction<Problem<?, ?>> heuristic){
 		this.heuristic = heuristic;
 		this.cpropagator = new ClauseBasedConstraintPropagator();
 	}

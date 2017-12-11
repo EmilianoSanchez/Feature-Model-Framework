@@ -3,6 +3,8 @@ package edu.isistan.fmframework.optimization;
 import edu.isistan.fmframework.core.Configuration;
 import edu.isistan.fmframework.core.FeatureModel;
 import edu.isistan.fmframework.core.constraints.Constraint;
+import edu.isistan.fmframework.core.constraints.globalConstraints.InequalityRestriction;
+import edu.isistan.fmframework.optimization.objectiveFunctions.AdditionObjective;
 import edu.isistan.fmframework.optimization.objectiveFunctions.ObjectiveFunction;
 
 public class Problem<C extends Constraint, O extends ObjectiveFunction> {
@@ -19,6 +21,13 @@ public class Problem<C extends Constraint, O extends ObjectiveFunction> {
 	public Problem(FeatureModel model) {
 		this.model = model;
 	}
+	
+	public Problem(FeatureModel model, O objective,
+			C[] restrictions) {
+		this.model = model;
+		this.objectiveFunctions = (O[]) new Object[] { objective };
+		this.globalConstraints = restrictions;
+	}
 
 	public boolean isValid() {
 		return Utils.isValid(this);
@@ -29,9 +38,11 @@ public class Problem<C extends Constraint, O extends ObjectiveFunction> {
 	}
 
 	public boolean satisfyGlobalConstraints(Configuration conf) {
-		for (C globalConstraint : this.globalConstraints) {
-			if (!globalConstraint.isSatisfied(conf))
-				return false;
+		if(this.globalConstraints!=null){
+			for (C globalConstraint : this.globalConstraints) {
+				if (!globalConstraint.isSatisfied(conf))
+					return false;
+			}
 		}
 		return true;
 	}

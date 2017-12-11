@@ -11,9 +11,9 @@ import edu.isistan.fmframework.core.constraints.treeConstraints.TreeConstraint;
 import edu.isistan.fmframework.optimization.optCSA.constraintPropagator.ConstraintPropagator;
 import edu.isistan.fmframework.optimization.optCSA.constraintPropagator.ConstraintPropagators;
 import edu.isistan.fmframework.optimization.optCSA.containers.Stack;
-import edu.isistan.fmframework.optimization.optCSA.variableOrderingHeuristic.StaticMostConstrained;
-import edu.isistan.fmframework.optimization.optCSA.variableOrderingHeuristic.TopDownUnassignedVariableSelector;
-import edu.isistan.fmframework.optimization.optCSA.variableOrderingHeuristic.UnassignedVariableSelector;
+import edu.isistan.fmframework.optimization.optCSA.variableSelectors.MostConstrainedFeature;
+import edu.isistan.fmframework.optimization.optCSA.variableSelectors.TopDown;
+import edu.isistan.fmframework.optimization.optCSA.variableSelectors.VariableSelector;
 
 public class Utils {
 
@@ -25,7 +25,7 @@ public class Utils {
 		Configuration initial=ConstraintPropagators.clauseBasedConstraintPropagator.getPartialConfiguration(instance.model);
 
 		if(initial!=null && instance.satisfyGlobalConstraints(initial)){
-			UnassignedVariableSelector unassignedVariableSelector=new StaticMostConstrained();
+			VariableSelector unassignedVariableSelector=new MostConstrainedFeature();
 			unassignedVariableSelector.setup(instance);
 			Stack<Configuration> open=new Stack<>();
 			open.push(initial);
@@ -33,7 +33,7 @@ public class Utils {
 			while (!open.isEmpty()) {
 				Configuration current = open.pop();
 				int unassignedVariable = unassignedVariableSelector.selectUnassignedVariable(current);
-				if (unassignedVariable == UnassignedVariableSelector.NO_UNASSIGNED_VARIABLES) {
+				if (unassignedVariable == VariableSelector.NO_UNASSIGNED_VARIABLES) {
 					return true;
 				} else {
 					Configuration succesor1 = (Configuration) current.clone();
@@ -60,7 +60,7 @@ public class Utils {
 		Configuration initialConfiguration =ConstraintPropagators.clauseBasedConstraintPropagator.getPartialConfiguration(instance.model);
 		List<Configuration> list=new LinkedList<>();
 		if(initialConfiguration!=null && instance.satisfyGlobalConstraints(initialConfiguration)){
-			TopDownUnassignedVariableSelector unassignedVariableSelector=new TopDownUnassignedVariableSelector();
+			TopDown unassignedVariableSelector=new TopDown();
 			unassignedVariableSelector.setup(instance);
 			Stack<Configuration> open=new Stack<Configuration>();
 			ConstraintPropagator cpropagator=ConstraintPropagators.clauseBasedConstraintPropagator;
@@ -69,7 +69,7 @@ public class Utils {
 			while (!open.isEmpty()) {
 				Configuration current = open.pop();
 				int unassignedVariable = unassignedVariableSelector.selectUnassignedVariable(current);
-				if (unassignedVariable == UnassignedVariableSelector.NO_UNASSIGNED_VARIABLES) {
+				if (unassignedVariable == VariableSelector.NO_UNASSIGNED_VARIABLES) {
 					list.add(current);
 				} else {
 					Configuration succesor1 = (Configuration) current.clone();
@@ -96,7 +96,7 @@ public class Utils {
 		Configuration initialConfiguration =ConstraintPropagators.clauseBasedConstraintPropagator.getPartialConfiguration(instance.model);
 		long count=0;
 		if(initialConfiguration!=null && instance.satisfyGlobalConstraints(initialConfiguration)){
-			TopDownUnassignedVariableSelector unassignedVariableSelector=new TopDownUnassignedVariableSelector();
+			TopDown unassignedVariableSelector=new TopDown();
 			unassignedVariableSelector.setup(instance);
 			Stack<Configuration> open=new Stack<Configuration>();
 			ConstraintPropagator cpropagator=ConstraintPropagators.clauseBasedConstraintPropagator;
@@ -105,7 +105,7 @@ public class Utils {
 			while (!open.isEmpty()) {
 				Configuration current = open.pop();
 				int unassignedVariable = unassignedVariableSelector.selectUnassignedVariable(current);
-				if (unassignedVariable == UnassignedVariableSelector.NO_UNASSIGNED_VARIABLES) {
+				if (unassignedVariable == VariableSelector.NO_UNASSIGNED_VARIABLES) {
 					count++;
 				} else {
 					Configuration succesor1 = (Configuration) current.clone();
@@ -128,7 +128,7 @@ public class Utils {
 		Configuration initialConfiguration = ConstraintPropagators.clauseBasedConstraintPropagator.getPartialConfiguration(instance.model);
 		long stateCount=0;
 		if(initialConfiguration!=null && instance.satisfyGlobalConstraints(initialConfiguration)){
-			TopDownUnassignedVariableSelector unassignedVariableSelector=new TopDownUnassignedVariableSelector();
+			TopDown unassignedVariableSelector=new TopDown();
 			unassignedVariableSelector.setup(instance);
 			Stack<Configuration> open=new Stack<Configuration>();
 			ConstraintPropagator cpropagator=ConstraintPropagators.cardinalityBasedConstraintPropagator;
@@ -138,7 +138,7 @@ public class Utils {
 			while (!open.isEmpty()) {
 				Configuration current = open.pop();
 				int unassignedVariable = unassignedVariableSelector.selectUnassignedVariable(current);
-				if (unassignedVariable == UnassignedVariableSelector.NO_UNASSIGNED_VARIABLES) {
+				if (unassignedVariable == VariableSelector.NO_UNASSIGNED_VARIABLES) {
 //					count++;
 				} else {
 					Configuration succesor1 = (Configuration) current.clone();

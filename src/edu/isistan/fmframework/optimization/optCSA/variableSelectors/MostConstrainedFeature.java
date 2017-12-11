@@ -1,4 +1,4 @@
-package edu.isistan.fmframework.optimization.optCSA.variableOrderingHeuristic;
+package edu.isistan.fmframework.optimization.optCSA.variableSelectors;
 
 import java.util.AbstractMap;
 import java.util.Comparator;
@@ -9,7 +9,7 @@ import edu.isistan.fmframework.core.Configuration;
 import edu.isistan.fmframework.core.FeatureState;
 import edu.isistan.fmframework.optimization.Problem;
 
-public class StaticMostConstrained   implements UnassignedVariableSelector<Problem<?,?>>{
+public class MostConstrainedFeature   implements VariableSelector<Problem<?,?>>{
 
 	int [] variableorder;
 	

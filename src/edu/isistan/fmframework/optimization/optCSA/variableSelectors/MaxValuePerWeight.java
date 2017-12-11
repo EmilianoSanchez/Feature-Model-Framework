@@ -1,4 +1,4 @@
-package edu.isistan.fmframework.optimization.optCSA.variableOrderingHeuristic;
+package edu.isistan.fmframework.optimization.optCSA.variableSelectors;
 
 import java.util.Iterator;
 import java.util.SortedMap;
@@ -11,7 +11,7 @@ import edu.isistan.fmframework.optimization.BasicProblem;
 import edu.isistan.fmframework.optimization.Problem;
 import edu.isistan.fmframework.optimization.objectiveFunctions.AdditionObjective;
 
-public class ValuePerWeightUnassignedVariableSelector implements UnassignedVariableSelector<Problem<?, ?>> {
+public class MaxValuePerWeight implements VariableSelector<Problem<?, ?>> {
 
 	int[] variableorder;
 

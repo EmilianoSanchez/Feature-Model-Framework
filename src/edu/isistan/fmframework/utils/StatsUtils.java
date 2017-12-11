@@ -45,11 +45,32 @@ public class StatsUtils {
         return Math.sqrt(temp / size);
     }
     
+    public static double deviationL(long[] times) {
+        double mean = averageL(times);
+        double temp = 0;
+
+        int size = times.length;
+        for (int i = 0; i < size; i++) {
+            double t = times[i];
+            temp += (mean - t) * (mean - t);
+        }
+        return Math.sqrt(temp / size);
+    }
+    
     public static double averageD(List<Double> times) {
         int size = times.size();
         double total = 0;
         for (int i = 0; i < size; i++) {
             total += times.get(i);
+        }
+        return total / (double) size;
+    }
+    
+    public static double averageD(double times[]) {
+        int size = times.length;
+        double total = 0;
+        for (int i = 0; i < size; i++) {
+            total += times[i];
         }
         return total / (double) size;
     }
@@ -90,5 +111,24 @@ public class StatsUtils {
         		total += 1;
         }
         return ((double) total) / ((double) size);
+    }
+    
+    public static double averageB(boolean[] times) {
+        int size = times.length;
+        int total = 0;
+        for (int i = 0; i < size; i++) {
+        	if(times[i])
+        		total += 1;
+        }
+        return ((double) total) / ((double) size);
+    }
+
+    public static double averageL(long times[]) {
+        int size = times.length;
+        long total = 0;
+        for (int i = 0; i < size; i++) {
+            total += times[i];
+        }
+        return ((double)total) / ((double) size);
     }
 }
