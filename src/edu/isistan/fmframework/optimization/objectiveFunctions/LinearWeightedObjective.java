@@ -16,31 +16,31 @@ public class LinearWeightedObjective implements ObjectiveFunction {
 												// as weight (w), the function
 												// is maximized
 
-	private List<SimpleEntry<AggregateObjective, Double>> terms;
+	private List<SimpleEntry<ObjectiveFunction, Double>> terms;
 
 	public LinearWeightedObjective() {
-		this.terms = new LinkedList<AbstractMap.SimpleEntry<AggregateObjective, Double>>();
+		this.terms = new LinkedList<AbstractMap.SimpleEntry<ObjectiveFunction, Double>>();
 	}
 
-	public LinearWeightedObjective(AggregateObjective ...terms) {
+	public LinearWeightedObjective(ObjectiveFunction ...terms) {
 		this();
-		for(AggregateObjective term: terms){
+		for(ObjectiveFunction term: terms){
 			this.addTerm(term);
 		}
 	}
 	
-	public LinearWeightedObjective(double weight, AggregateObjective ...terms) {
+	public LinearWeightedObjective(double weight, ObjectiveFunction ...terms) {
 		this();
-		for(AggregateObjective term: terms){
+		for(ObjectiveFunction term: terms){
 			this.addTerm(term,weight);
 		}
 	}
 
-	public void addTerm(AggregateObjective term, double weight) {
-		this.terms.add(new AbstractMap.SimpleEntry<AggregateObjective, Double>(term, weight));
+	public void addTerm(ObjectiveFunction term, double weight) {
+		this.terms.add(new AbstractMap.SimpleEntry<ObjectiveFunction, Double>(term, weight));
 	}
 
-	public void addTerm(AggregateObjective cof) {
+	public void addTerm(ObjectiveFunction cof) {
 		this.addTerm(cof, MINIMIZE);
 	}
 
@@ -51,16 +51,16 @@ public class LinearWeightedObjective implements ObjectiveFunction {
 	@Override
 	public double evaluate(Configuration conf) {
 		double result = 0.0;
-		for (AbstractMap.SimpleEntry<AggregateObjective, Double> cof : terms)
+		for (AbstractMap.SimpleEntry<ObjectiveFunction, Double> cof : terms)
 			result += cof.getKey().evaluate(conf) * cof.getValue();
 		return result;
 	}
 
-	public List<SimpleEntry<AggregateObjective, Double>> getTerms() {
+	public List<SimpleEntry<ObjectiveFunction, Double>> getTerms() {
 		return terms;
 	}
 
-	public void setTerms(List<SimpleEntry<AggregateObjective, Double>> terms) {
+	public void setTerms(List<SimpleEntry<ObjectiveFunction, Double>> terms) {
 		this.terms = terms;
 	}
 

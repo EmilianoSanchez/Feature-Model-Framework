@@ -1,4 +1,4 @@
-package edu.isistan.fmframework.optimization.optSAT;
+package edu.isistan.fmframework.optimization.optBoolOpt;
 
 import edu.isistan.fmframework.core.Configuration;
 import edu.isistan.fmframework.core.FeatureState;
@@ -16,7 +16,7 @@ import net.sf.javailp.SolverFactory;
 import net.sf.javailp.SolverFactoryGLPK;
 import net.sf.javailp.SolverFactorySAT4J;
 
-public class JavaSAT01LPalgorithm implements BasicAlgorithm {
+public class JavaBoolOptAlgorithm implements BasicAlgorithm {
 
 	SolverFactory factory;
 	ILPSolver ilpsolver;
@@ -28,19 +28,19 @@ public class JavaSAT01LPalgorithm implements BasicAlgorithm {
 		SAT4J, GLPK
 	}
 
-	public JavaSAT01LPalgorithm() {
+	public JavaBoolOptAlgorithm() {
 		this(OptType.MAX,ILPSolver.SAT4J);
 	}
 	
-	public JavaSAT01LPalgorithm(OptType optType) {
+	public JavaBoolOptAlgorithm(OptType optType) {
 		this(optType,ILPSolver.SAT4J);
 	}
 
-	public JavaSAT01LPalgorithm(ILPSolver ilpsolver) {
+	public JavaBoolOptAlgorithm(ILPSolver ilpsolver) {
 		this(OptType.MAX,ilpsolver);
 	}
 	
-	public JavaSAT01LPalgorithm(OptType optType,ILPSolver ilpsolver) {
+	public JavaBoolOptAlgorithm(OptType optType,ILPSolver ilpsolver) {
 		this.ilpsolver = ilpsolver;
 		switch (ilpsolver) {
 		case SAT4J:
@@ -125,7 +125,7 @@ public class JavaSAT01LPalgorithm implements BasicAlgorithm {
 
 	@Override
 	public String getName() {
-		return BasicAlgorithm.super.getName() + "-" + ilpsolver.toString();
+		return "BoolOpt-" + ilpsolver.toString();
 	}
 	
 	private static final double MULTIPLIER = 1000000.0;

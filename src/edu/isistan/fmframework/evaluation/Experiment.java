@@ -24,6 +24,8 @@ public class Experiment {
 	public Algorithm<BasicProblem> algorithms[];
 	public BasicProblem instances[][];
 	public InstanceMetric<BasicProblem> instanceMetrics[];
+	public boolean verbose;
+	public boolean explicitGCcall;
 
 	public long[][][] responseTime;
 	public double[][][] values;
@@ -31,12 +33,20 @@ public class Experiment {
 	public double[][] worstValues;
 	
 	public boolean[][][] correctness;
+
 	
 	public Experiment(Algorithm<BasicProblem> algorithms[], BasicProblem instances[][],
-			InstanceMetric<BasicProblem> instanceMetrics[]) {
+			InstanceMetric<BasicProblem> instanceMetrics[], boolean verbose, boolean explicitGCcall) {
 		this.algorithms = algorithms;
 		this.instances = instances;
 		this.instanceMetrics = instanceMetrics;
+		this.verbose = verbose;
+		this.explicitGCcall = explicitGCcall;
+	};
+	
+	public Experiment(Algorithm<BasicProblem> algorithms[], BasicProblem instances[][],
+			InstanceMetric<BasicProblem> instanceMetrics[]) {
+		this(algorithms,instances,instanceMetrics,true,false);
 	};
 	
 	public Experiment(Algorithm<BasicProblem> algorithms[], BasicProblem instances[][]) {
@@ -44,30 +54,32 @@ public class Experiment {
 	};
 	
 	public void executeResponseTime() {
-		// System.gc();
 
 		if (instances != null && algorithms != null) {
 			responseTime = new long[algorithms.length][instances.length][instances[0].length];
 
 			for (int r = 0; r < instances.length; r++) {
 				
-				System.out.println((r + 1) + " of " + instances.length+ " rounds");
+				if(verbose)
+					System.out.println((r + 1) + " of " + instances.length+ " rounds");
 				
 				for (int i = 0; i < instances[r].length; i++) {
 				
-					if(i>850)
+					if(verbose)
 						System.out.println((i + 1) + " of " + instances[r].length+ " instances");
 	
+					Configuration conf;
 					for (int a = 0; a < algorithms.length; a++) {
 						algorithms[a].preprocessInstance(instances[r][i]);
 	
-						if(i>850)
+						if(verbose)
 							System.out.println("algoritmo "+a);
 						
+						if(this.explicitGCcall)
+							System.gc();
 						
 						long start = System.nanoTime();
-//						System.gc();
-						Configuration conf = algorithms[a].selectConfiguration(instances[r][i]);
+						conf = algorithms[a].selectConfiguration(instances[r][i]);
 						long end = System.nanoTime();
 	
 						responseTime[a][r][i] = end - start;
@@ -79,7 +91,6 @@ public class Experiment {
 
 
 	public void executeAprox() {
-		// System.gc();
 
 		if (instances != null && algorithms != null) {
 			this.responseTime = new long[algorithms.length][instances.length][instances[0].length];
@@ -90,11 +101,12 @@ public class Experiment {
 
 			for (int r = 0; r < instances.length; r++) {
 				
-				System.out.println((r + 1) + " of " + instances.length+ " rounds");
+				if(verbose)
+					System.out.println((r + 1) + " of " + instances.length+ " rounds");
 				
 				for (int i = 0; i < instances[r].length; i++) {
 				
-					if(i>850)
+					if(verbose)
 						System.out.println((i + 1) + " of " + instances[r].length+ " instances");
 	
 					
@@ -104,12 +116,13 @@ public class Experiment {
 					for (int a = 0; a < algorithms.length; a++) {
 						algorithms[a].preprocessInstance(instances[r][i]);
 	
-						if(i>850)
+						if(verbose)
 							System.out.println("algoritmo "+a);
 						
+						if(this.explicitGCcall)
+							System.gc();
 						
 						long start = System.nanoTime();
-//						System.gc();
 						conf = algorithms[a].selectConfiguration(instances[r][i]);
 						long end = System.nanoTime();
 	

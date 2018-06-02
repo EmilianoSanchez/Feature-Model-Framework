@@ -12,7 +12,7 @@ public class Imply extends BinaryConstraint {
 
 	@Override
 	protected void generateClauses(Set<Clause> clauses) {
-		Clause clause = new Clause(new int[]{this.leftFeature,this.rightFeature},new boolean[]{false,true});
+		Clause clause = new Clause(new int[] { this.leftFeature, this.rightFeature }, new boolean[] { false, true });
 		clauses.add(clause);
 	}
 
@@ -20,10 +20,10 @@ public class Imply extends BinaryConstraint {
 	public String toString() {
 		return "\"" + this.leftFeature + "\"->\"" + this.rightFeature + "\"";
 	}
-	
+
 	@Override
 	public Imply clone() {
-		Imply clone = new Imply(this.leftFeature,this.rightFeature);
+		Imply clone = new Imply(this.leftFeature, this.rightFeature);
 		return clone;
 	}
 }

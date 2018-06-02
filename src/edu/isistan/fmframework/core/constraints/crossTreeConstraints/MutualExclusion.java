@@ -12,8 +12,8 @@ public class MutualExclusion extends BinaryConstraint {
 
 	@Override
 	protected void generateClauses(Set<Clause> clauses) {
-		Clause clause1 = new Clause(new int[]{this.leftFeature,this.rightFeature},new boolean[]{false,false});
-		Clause clause2 = new Clause(new int[]{this.leftFeature,this.rightFeature},new boolean[]{true,true});
+		Clause clause1 = new Clause(new int[] { this.leftFeature, this.rightFeature }, new boolean[] { false, false });
+		Clause clause2 = new Clause(new int[] { this.leftFeature, this.rightFeature }, new boolean[] { true, true });
 
 		clauses.add(clause1);
 		clauses.add(clause2);
@@ -23,10 +23,10 @@ public class MutualExclusion extends BinaryConstraint {
 	public String toString() {
 		return "\"" + this.leftFeature + "\"<-/>\"" + this.rightFeature + "\"";
 	}
-	
+
 	@Override
 	public MutualExclusion clone() {
-		MutualExclusion clone = new MutualExclusion(this.leftFeature,this.rightFeature);
+		MutualExclusion clone = new MutualExclusion(this.leftFeature, this.rightFeature);
 		return clone;
 	}
 }

@@ -14,13 +14,13 @@ import edu.isistan.fmframework.evaluation.SPLOTModels;
 import edu.isistan.fmframework.optimization.Algorithm;
 import edu.isistan.fmframework.optimization.BasicProblem;
 import edu.isistan.fmframework.optimization.opt01LP.Java01LPalgorithm;
+import edu.isistan.fmframework.optimization.optBoolOpt.JavaBoolOptAlgorithm;
 import edu.isistan.fmframework.optimization.optCSA.CSAalgorithm;
 import edu.isistan.fmframework.optimization.optCSA.constraintPropagator.ConstraintPropagators;
 import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicA;
 import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicB;
 import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.Heuristics;
 import edu.isistan.fmframework.optimization.optCSA.variableSelectors.VariableSelectors;
-import edu.isistan.fmframework.optimization.optSAT.JavaSAT01LPalgorithm;
 import fm.FeatureModelException;
 
 public class TestAlgorithmProperties {
@@ -30,7 +30,7 @@ public class TestAlgorithmProperties {
 		
 		Algorithm<BasicProblem> exactAlgorithms[] = new Algorithm[] {
 				new Java01LPalgorithm(), 
-				new JavaSAT01LPalgorithm(), 
+				new JavaBoolOptAlgorithm(), 
 				CSAalgorithm.build(CSAalgorithm.Strategy.BestFS, Heuristics.heuristicB,VariableSelectors.maxHeuristicValueVariableSelector),
 				CSAalgorithm.build(CSAalgorithm.Strategy.BandB, Heuristics.heuristicB,VariableSelectors.maxHeuristicValueVariableSelector)
 		};

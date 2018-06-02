@@ -5,7 +5,7 @@ import java.util.Set;
 
 import edu.isistan.fmframework.core.Configuration;
 
-public abstract class ClauseBasedConstraint implements Constraint{
+public abstract class ClauseBasedConstraint implements Constraint {
 	private Set<Clause> clauses;
 
 	protected abstract void generateClauses(Set<Clause> clauses);
@@ -38,12 +38,12 @@ public abstract class ClauseBasedConstraint implements Constraint{
 
 	@Override
 	public String toString() {
-		StringBuilder builder=new StringBuilder();
+		StringBuilder builder = new StringBuilder();
 		for (Clause clause : getClauses()) {
 			builder.append(clause.toString());
 			builder.append("&");
 		}
 		return builder.toString();
 	}
-	
+
 }

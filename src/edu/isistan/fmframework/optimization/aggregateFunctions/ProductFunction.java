@@ -16,5 +16,9 @@ public class ProductFunction implements AggregateFunction {
 	public double inverseOperator(double operand1, double operand2) {
 		return operand1/operand2;
 	}
-
+	
+	@Override
+	public AggregateFunctionType getType() {
+		return AggregateFunctionType.PRODUCT;
+	}
 }

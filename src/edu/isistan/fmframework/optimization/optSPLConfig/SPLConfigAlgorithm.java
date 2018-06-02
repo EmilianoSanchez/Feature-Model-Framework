@@ -106,4 +106,8 @@ public class SPLConfigAlgorithm implements BasicAlgorithm {
 		return fm;
 	}
 
+	@Override
+	public String getName() {
+		return "SPLConfig-Greedy";
+	}
 }

@@ -4,10 +4,10 @@ import java.util.Set;
 
 import edu.isistan.fmframework.core.constraints.Clause;
 
-public class OrGroup extends TreeConstraint implements Cloneable{
+public class OrGroup extends TreeConstraint implements Cloneable {
 
 	public OrGroup(int parent, int... children) {
-		super(1,children.length,parent, children);
+		super(1, children.length, parent, children);
 	}
 
 	@Override
@@ -28,5 +28,5 @@ public class OrGroup extends TreeConstraint implements Cloneable{
 	public TreeConstraintType getType() {
 		return TreeConstraintType.OR_GROUP;
 	}
-	
+
 }

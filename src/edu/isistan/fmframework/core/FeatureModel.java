@@ -343,4 +343,13 @@ public class FeatureModel extends ClauseBasedConstraint {
 		return super.isSatisfied(conf);
 	}
 
+	public int getFeatureIdByName(String featureName) {
+		for(int i=0;i<this.features.length;i++) {
+			FMNode fmNode = this.features[i];
+			if(fmNode.feature.getName().equals(featureName))
+				return i;
+		}
+		return -1;
+	}
+
 }

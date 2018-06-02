@@ -12,7 +12,7 @@ public class Exclude extends BinaryConstraint {
 
 	@Override
 	protected void generateClauses(Set<Clause> clauses) {
-		Clause clause = new Clause(new int[]{this.leftFeature,this.rightFeature},new boolean[]{false,false});
+		Clause clause = new Clause(new int[] { this.leftFeature, this.rightFeature }, new boolean[] { false, false });
 		clauses.add(clause);
 	}
 
@@ -20,10 +20,10 @@ public class Exclude extends BinaryConstraint {
 	public String toString() {
 		return "\"" + this.leftFeature + "\"-/>\"" + this.rightFeature + "\"";
 	}
-	
+
 	@Override
 	public Exclude clone() {
-		Exclude clone = new Exclude(this.leftFeature,this.rightFeature);
+		Exclude clone = new Exclude(this.leftFeature, this.rightFeature);
 		return clone;
 	}
 }

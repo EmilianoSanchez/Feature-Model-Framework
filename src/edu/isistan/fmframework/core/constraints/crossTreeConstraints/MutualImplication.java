@@ -12,8 +12,8 @@ public class MutualImplication extends BinaryConstraint {
 
 	@Override
 	protected void generateClauses(Set<Clause> clauses) {
-		Clause clause1 = new Clause(new int[]{this.leftFeature,this.rightFeature},new boolean[]{false,true});
-		Clause clause2 = new Clause(new int[]{this.leftFeature,this.rightFeature},new boolean[]{true,false});
+		Clause clause1 = new Clause(new int[] { this.leftFeature, this.rightFeature }, new boolean[] { false, true });
+		Clause clause2 = new Clause(new int[] { this.leftFeature, this.rightFeature }, new boolean[] { true, false });
 
 		clauses.add(clause1);
 		clauses.add(clause2);
@@ -23,10 +23,10 @@ public class MutualImplication extends BinaryConstraint {
 	public String toString() {
 		return "\"" + this.leftFeature + "\"<->\"" + this.rightFeature + "\"";
 	}
-	
+
 	@Override
 	public MutualImplication clone() {
-		MutualImplication clone = new MutualImplication(this.leftFeature,this.rightFeature);
+		MutualImplication clone = new MutualImplication(this.leftFeature, this.rightFeature);
 		return clone;
 	}
 }

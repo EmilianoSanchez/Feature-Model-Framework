@@ -7,7 +7,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import edu.isistan.fmframework.core.Configuration;
-import edu.isistan.fmframework.core.FeatureModel;
 import edu.isistan.fmframework.core.constraints.Constraint;
 
 public class InequalityRestriction implements Constraint {

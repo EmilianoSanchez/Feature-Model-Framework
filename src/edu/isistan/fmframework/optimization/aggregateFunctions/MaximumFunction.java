@@ -16,4 +16,9 @@ public class MaximumFunction implements AggregateFunction {
 	public double inverseOperator(double operand1, double operand2) {
 		throw new UnsupportedOperationException("Inverse operator not supported");
 	}
+	
+	@Override
+	public AggregateFunctionType getType() {
+		return AggregateFunctionType.MAXIMUM;
+	}
 }

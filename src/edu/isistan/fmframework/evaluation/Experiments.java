@@ -7,6 +7,7 @@ import edu.isistan.fmframework.optimization.Algorithm;
 import edu.isistan.fmframework.optimization.BasicProblem;
 import edu.isistan.fmframework.optimization.Problem;
 import edu.isistan.fmframework.optimization.opt01LP.Java01LPalgorithm;
+import edu.isistan.fmframework.optimization.optBoolOpt.JavaBoolOptAlgorithm;
 import edu.isistan.fmframework.optimization.optCSA.CSAalgorithm;
 import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicA;
 import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicB;
@@ -14,7 +15,6 @@ import edu.isistan.fmframework.optimization.optCSA.variableSelectors.MaxHeuristi
 import edu.isistan.fmframework.optimization.optCSA.variableSelectors.MaxValuePerWeight;
 import edu.isistan.fmframework.optimization.optCSA.variableSelectors.MostConstrainedFeature;
 import edu.isistan.fmframework.optimization.optGAFES.GAFESalgorithm;
-import edu.isistan.fmframework.optimization.optSAT.JavaSAT01LPalgorithm;
 import edu.isistan.fmframework.optimization.optSPLConfig.SPLConfigAlgorithm;
 import edu.isistan.fmframework.utils.CSVUtils;
 import edu.isistan.fmframework.utils.StatsUtils;
@@ -323,7 +323,7 @@ public class Experiments {
 				CSAalgorithm.build(CSAalgorithm.Strategy.BestFS, new HeuristicB(),
 						new MaxHeuristicValue(new HeuristicB())),
 
-				new Java01LPalgorithm(), new JavaSAT01LPalgorithm() };
+				new Java01LPalgorithm(), new JavaBoolOptAlgorithm() };
 
 		Algorithm<BasicProblem> algorithms2[] = new Algorithm[] { algorithms[1], algorithms[2], algorithms[4],
 				algorithms[5], algorithms[6], algorithms[7] };

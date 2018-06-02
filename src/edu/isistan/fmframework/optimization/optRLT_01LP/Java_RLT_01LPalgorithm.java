@@ -1,15 +1,22 @@
-package edu.isistan.fmframework.optimization.opt01LP;
+package edu.isistan.fmframework.optimization.optRLT_01LP;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import edu.isistan.fmframework.core.Configuration;
 import edu.isistan.fmframework.core.FeatureState;
 import edu.isistan.fmframework.core.constraints.Clause;
 import edu.isistan.fmframework.core.constraints.ClauseBasedConstraint;
+import edu.isistan.fmframework.core.constraints.globalConstraints.InequalityRestriction;
 import edu.isistan.fmframework.core.constraints.treeConstraints.TreeConstraint;
+import edu.isistan.fmframework.optimization.Algorithm;
 import edu.isistan.fmframework.optimization.BasicAlgorithm;
 import edu.isistan.fmframework.optimization.BasicProblem;
+import edu.isistan.fmframework.optimization.objectiveFunctions.MultiLinearPolynomialObjective;
 import net.sf.javailp.Linear;
 import net.sf.javailp.Operator;
 import net.sf.javailp.OptType;
@@ -20,7 +27,7 @@ import net.sf.javailp.SolverFactory;
 import net.sf.javailp.SolverFactoryGLPK;
 import net.sf.javailp.SolverFactorySAT4J;
 
-public class Java01LPalgorithm implements BasicAlgorithm {
+public class Java_RLT_01LPalgorithm implements Algorithm<edu.isistan.fmframework.optimization.Problem<?, ?>>  {
 
 	SolverFactory factory;
 	ILPSolver ilpsolver;
@@ -32,19 +39,19 @@ public class Java01LPalgorithm implements BasicAlgorithm {
 		SAT4J, GLPK
 	}
 
-	public Java01LPalgorithm() {
-		this(OptType.MAX, ILPSolver.SAT4J);
+	public Java_RLT_01LPalgorithm() {
+		this(OptType.MIN, ILPSolver.SAT4J);
 	}
 
-	public Java01LPalgorithm(OptType optType) {
+	public Java_RLT_01LPalgorithm(OptType optType) {
 		this(optType, ILPSolver.SAT4J);
 	}
 
-	public Java01LPalgorithm(ILPSolver ilpsolver) {
-		this(OptType.MAX, ilpsolver);
+	public Java_RLT_01LPalgorithm(ILPSolver ilpsolver) {
+		this(OptType.MIN, ilpsolver);
 	}
 
-	public Java01LPalgorithm(OptType optType, ILPSolver ilpsolver) {
+	public Java_RLT_01LPalgorithm(OptType optType, ILPSolver ilpsolver) {
 		this.ilpsolver = ilpsolver;
 		switch (ilpsolver) {
 		case SAT4J:
@@ -60,14 +67,14 @@ public class Java01LPalgorithm implements BasicAlgorithm {
 	Solver solver;
 
 	@Override
-	public void preprocessInstance(BasicProblem instance) {
+	public void preprocessInstance(edu.isistan.fmframework.optimization.Problem<?, ?> instance) {
 		problem = buildProblem(instance);
 		solver = factory.get(); // you should use this solver only once
 		// for one problem
 	}
 
 	@Override
-	public Configuration selectConfiguration(BasicProblem instance) {
+	public Configuration selectConfiguration(edu.isistan.fmframework.optimization.Problem<?, ?> instance) {
 
 		Result result = solver.solve(problem);
 
@@ -84,7 +91,7 @@ public class Java01LPalgorithm implements BasicAlgorithm {
 		return null;
 	}
 
-	private Problem buildProblem(BasicProblem instance) {
+	private Problem buildProblem(edu.isistan.fmframework.optimization.Problem<?, ?> instance) {
 		Problem problem = new Problem();
 
 		Linear linear = new Linear();
@@ -170,25 +177,68 @@ public class Java01LPalgorithm implements BasicAlgorithm {
 		for (int r = 0; r < instance.globalConstraints.length; r++) {
 			linear = new Linear();
 			for (int i = 0; i < instance.model.getNumFeatures(); i++) {
-				linear.add((long) (instance.globalConstraints[r].attributes[i] * MULTIPLIER), i);
+				linear.add((long) (((InequalityRestriction)instance.globalConstraints[r]).attributes[i] * MULTIPLIER), i);
 			}
 			problem.add(new net.sf.javailp.Constraint("constraint", linear, Operator.LE,
-					(long) ((instance.globalConstraints[r].restrictionLimit) * MULTIPLIER)));
+					(long) ((((InequalityRestriction)instance.globalConstraints[r]).restrictionLimit) * MULTIPLIER)));
 		}
 
-		linear = new Linear();
+		if (!(instance.objectiveFunctions[0] instanceof MultiLinearPolynomialObjective)) {
+			throw new UnsupportedOperationException("No se soporta la funcion");
+		}
 
-		for (int i = 0; i < instance.model.getNumFeatures(); i++) {
-			linear.add((long) (instance.objectiveFunctions[0].attributes[i] * MULTIPLIER), i);
+		Linear linearObjective = new Linear();
+		MultiLinearPolynomialObjective objective = (MultiLinearPolynomialObjective) instance.objectiveFunctions[0];
+		List<Pair<Double, SortedSet<Integer>>> terms = objective.getTerms();
+
+		int newVariable = instance.model.getNumFeatures();
+		for (Pair<Double, SortedSet<Integer>> term : terms) {
+			// System.out.println("Term: "+term);
+			switch (term.getRight().size()) {
+			case 0:
+				linearObjective.add((long) (term.getKey() * MULTIPLIER), newVariable);
+				linear = new Linear();
+				linear.add(1, newVariable);
+				problem.add(new net.sf.javailp.Constraint("constraint", linear, Operator.EQ, 1));
+				newVariable++;
+				break;
+			case 1:
+				linearObjective.add((long) (term.getKey() * MULTIPLIER), term.getRight().first());
+				break;
+			default:
+				linearObjective.add((long) (term.getKey() * MULTIPLIER), newVariable);
+				//
+				int negLiterals = 0;
+				linear = new Linear();
+				for (int variable : term.getRight()) {
+					linear.add(-1, variable);
+					negLiterals++;
+				}
+				linear.add(1, newVariable);
+				problem.add(new net.sf.javailp.Constraint("constraint", linear, Operator.GE, 1 - negLiterals));
+
+				for (int variable : term.getRight()) {
+					linear = new Linear();
+					linear.add(1, variable);
+					linear.add(-1, newVariable);
+					problem.add(new net.sf.javailp.Constraint("constraint", linear, Operator.GE, 0));
+				}
+				//
+				newVariable++;
+			}
+		}
+		for (int i = 0; i < newVariable; i++)
 			problem.setVarType(i, Boolean.class);
-		}
-		problem.setObjective(linear, optType);
+
+		// System.out.println("linearObjective: "+ linearObjective);
+
+		problem.setObjective(linearObjective, optType);
 		return problem;
 	}
 
 	@Override
 	public String getName() {
-		return "01LP-" + ilpsolver.toString();
+		return "RLT 01LP-" + ilpsolver.toString();
 	}
 
 	private static final double MULTIPLIER = 1000000.0;
