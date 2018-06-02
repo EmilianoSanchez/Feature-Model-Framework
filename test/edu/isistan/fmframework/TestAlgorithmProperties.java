@@ -1,15 +1,17 @@
 package edu.isistan.fmframework;
 
+import java.io.File;
 import java.util.List;
 import java.util.stream.DoubleStream;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import edu.isistan.fmframework.core.Configuration;
 import edu.isistan.fmframework.core.FeatureModel;
-import edu.isistan.fmframework.evaluation.BasicProblemGenerator;
+import edu.isistan.fmframework.evaluation.ProblemGenerator;
 import edu.isistan.fmframework.evaluation.SPLOTModels;
 import edu.isistan.fmframework.optimization.Algorithm;
 import edu.isistan.fmframework.optimization.BasicProblem;
@@ -27,28 +29,28 @@ public class TestAlgorithmProperties {
 
 	@Test
 	public void testExactVsAproxAlgorithms() throws FeatureModelException {
-		
-		Algorithm<BasicProblem> exactAlgorithms[] = new Algorithm[] {
-				new Java01LPalgorithm(), 
-				new JavaBoolOptAlgorithm(), 
-				CSAalgorithm.build(CSAalgorithm.Strategy.BestFS, Heuristics.heuristicB,VariableSelectors.maxHeuristicValueVariableSelector),
-				CSAalgorithm.build(CSAalgorithm.Strategy.BandB, Heuristics.heuristicB,VariableSelectors.maxHeuristicValueVariableSelector)
-		};
+
+		Algorithm<BasicProblem> exactAlgorithms[] = new Algorithm[] { new Java01LPalgorithm(),
+				new JavaBoolOptAlgorithm(),
+				CSAalgorithm.build(CSAalgorithm.Strategy.BestFS, Heuristics.heuristicB,
+						VariableSelectors.maxHeuristicValueVariableSelector),
+				CSAalgorithm.build(CSAalgorithm.Strategy.BandB, Heuristics.heuristicB,
+						VariableSelectors.maxHeuristicValueVariableSelector) };
 		CSAalgorithm approxAlgorithmHB = CSAalgorithm.build(CSAalgorithm.Strategy.BT, new HeuristicB());
 		CSAalgorithm approxAlgorithmHA = CSAalgorithm.build(CSAalgorithm.Strategy.BT, new HeuristicA());
 
-		List<FeatureModel> models = SPLOTModels.getModels(0, 882);
-		List<BasicProblem> instances=BasicProblemGenerator.generateValidBasicProblemInstances(models,0);
-		
+		List<Pair<File, FeatureModel>> models = SPLOTModels.getModels(0, 882);
+		List<BasicProblem> instances = ProblemGenerator.generateValidBasicProblemInstances(models, 0);
+
 		int count = 0;
 		int counts[] = new int[3];
 		for (BasicProblem instance : instances) {
 			System.out.println(count);
 			count++;
-			
-			double values[]=new double[exactAlgorithms.length];
+
+			double values[] = new double[exactAlgorithms.length];
 			Configuration conf;
-			for (int i=0;i<exactAlgorithms.length;i++) {
+			for (int i = 0; i < exactAlgorithms.length; i++) {
 				exactAlgorithms[i].preprocessInstance(instance);
 				conf = exactAlgorithms[i].selectConfiguration(instance);
 				values[i] = instance.evaluateObjectives(conf)[0];
@@ -56,15 +58,15 @@ public class TestAlgorithmProperties {
 			approxAlgorithmHA.preprocessInstance(instance);
 			Configuration confA = approxAlgorithmHA.selectConfiguration(instance);
 			double aproxValueHA = instance.evaluateObjectives(confA)[0];
-			
+
 			approxAlgorithmHB.preprocessInstance(instance);
 			Configuration confB = approxAlgorithmHB.selectConfiguration(instance);
 			double aproxValueHB = instance.evaluateObjectives(confB)[0];
-			
-			for (int i=1;i<exactAlgorithms.length;i++) {
+
+			for (int i = 1; i < exactAlgorithms.length; i++) {
 				Assert.assertTrue(values[0] == values[i]);
 			}
-			
+
 			Assert.assertTrue(values[0] >= aproxValueHB);
 			Assert.assertTrue(aproxValueHB >= aproxValueHA);
 
@@ -75,57 +77,60 @@ public class TestAlgorithmProperties {
 					counts[0] += 1;
 				} else {
 					counts[2] += 1;
-					System.out.println(aproxValueHB+ " "+ aproxValueHA);
+					System.out.println(aproxValueHB + " " + aproxValueHA);
 					System.out.println(confB);
 					System.out.println(confA);
-					System.out.println("Sum: "+DoubleStream.of(instance.objectiveFunctions[0].attributes).sum());
+					System.out.println("Sum: " + DoubleStream.of(instance.objectiveFunctions[0].attributes).sum());
 					System.out.println(instance.toString());
 				}
 			}
 		}
-		
-		System.out.println("HB>HA: "+counts[0]+ " HB==HA: "+counts[1]+" HB<HA: "+counts[2]);
+
+		System.out.println("HB>HA: " + counts[0] + " HB==HA: " + counts[1] + " HB<HA: " + counts[2]);
 
 	}
-	
+
 	@Test
 	@Ignore
 	public void testAdmissibleHeuristic() throws FeatureModelException {
 		HeuristicB heuristicB = new HeuristicB();
 		HeuristicA heuristicA = new HeuristicA();
-		
-		List<FeatureModel> models = SPLOTModels.getModels(0, 882);
-		List<BasicProblem> instances=BasicProblemGenerator.generateValidBasicProblemInstances(models,0);
-		
+
+		List<Pair<File, FeatureModel>> models = SPLOTModels.getModels(0, 882);
+		List<BasicProblem> instances = ProblemGenerator.generateValidBasicProblemInstances(models, 0);
+
 		int count = 0;
-//		int counts[] = new int[3];
+		// int counts[] = new int[3];
 		for (BasicProblem instance : instances) {
 			System.out.println(count);
 			count++;
-			
-			Configuration partialConfiguration = ConstraintPropagators.clauseBasedConstraintPropagator.getPartialConfiguration(instance.model);
+
+			Configuration partialConfiguration = ConstraintPropagators.clauseBasedConstraintPropagator
+					.getPartialConfiguration(instance.model);
 			heuristicA.setup(instance);
 			double evaluationA = heuristicA.evaluate(partialConfiguration);
 			heuristicB.setup(instance);
 			double evaluationB = heuristicB.evaluate(partialConfiguration);
-		
+
 			Assert.assertTrue(evaluationA <= evaluationB);
-			
-//			if(evaluationB==evaluationA){
-//				counts[1]+=1;
-//			}else{
-//				if(evaluationB>evaluationA){
-//					counts[0]+=1;
-//				}else{
-//					counts[2]+=1;
-//					System.out.println(evaluationA+ " "+ evaluationB);
-//					System.out.println(partialConfiguration);
-//					System.out.println("Sum: "+DoubleStream.of(instance.objectiveFunctions[0].attributes).sum());
-//					System.out.println(instance.toString());
-//				}
-//			}
+
+			// if(evaluationB==evaluationA){
+			// counts[1]+=1;
+			// }else{
+			// if(evaluationB>evaluationA){
+			// counts[0]+=1;
+			// }else{
+			// counts[2]+=1;
+			// System.out.println(evaluationA+ " "+ evaluationB);
+			// System.out.println(partialConfiguration);
+			// System.out.println("Sum:
+			// "+DoubleStream.of(instance.objectiveFunctions[0].attributes).sum());
+			// System.out.println(instance.toString());
+			// }
+			// }
 		}
-		
-//		System.out.println("HB>HA: "+counts[0]+ " HB==HA: "+counts[1]+" HB<HA: "+counts[2]);
+
+		// System.out.println("HB>HA: "+counts[0]+ " HB==HA: "+counts[1]+" HB<HA:
+		// "+counts[2]);
 	}
 }

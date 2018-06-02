@@ -14,8 +14,6 @@ import edu.isistan.fmframework.core.constraints.treeConstraints.MandatoryFeature
 import edu.isistan.fmframework.core.constraints.treeConstraints.OptionalFeature;
 import edu.isistan.fmframework.core.constraints.treeConstraints.OrGroup;
 import edu.isistan.fmframework.core.constraints.treeConstraints.TreeConstraint;
-import edu.isistan.fmframework.optimization.objectiveFunctions.AdditionObjective;
-import edu.isistan.fmframework.optimization.objectiveFunctions.LinearWeightedObjective;
 import edu.isistan.fmframework.utils.RandomUtils;
 
 public class FMGenerator {
@@ -25,10 +23,6 @@ public class FMGenerator {
 	private int numTreeConstraints;
 	private CrossTreeConstraintType ctctype;
 	private int numCrossTreeConstraints;
-	private int numResourceRestrictions;
-	private AggregateFunctionType resourcerestrictionstype;
-	private int numObjectives;
-	private AggregateFunctionType objectivestype;
 
 	public FMGenerator() {
 		this.numFeatures = 0;
@@ -36,10 +30,6 @@ public class FMGenerator {
 		this.numTreeConstraints = 0;
 		this.ctctype = new CrossTreeConstraintType();
 		this.numCrossTreeConstraints = 0;
-		this.numResourceRestrictions = 0;
-		this.resourcerestrictionstype = AggregateFunctionType.ALL_ADDITION;
-		this.numObjectives = 0;
-		this.objectivestype = AggregateFunctionType.ALL_ADDITION;
 	};
 
 	public FMGenerator setNumFeatures(int numFeatures) {
@@ -56,7 +46,7 @@ public class FMGenerator {
 		this.numTreeConstraints = numTreeConstraints;
 		return this;
 	}
-	
+
 	public FMGenerator setCTCType(CrossTreeConstraintType ctctype) {
 		this.ctctype = ctctype;
 		return this;
@@ -67,80 +57,74 @@ public class FMGenerator {
 		return this;
 	}
 
-	public FMGenerator setNumResourceRestrictions(int numResourceRestrictions) {
-		this.numResourceRestrictions = numResourceRestrictions;
-		return this;
-	}
-
-	public FMGenerator setResourceRestrictionsType(AggregateFunctionType resourcerestrictionstype) {
-		this.resourcerestrictionstype = resourcerestrictionstype;
-		return this;
-	}
-
-	public FMGenerator setNumObjectives(int numObjectives) {
-		this.numObjectives = numObjectives;
-		return this;
-	}
-
-	public FMGenerator setObjectivesType(AggregateFunctionType objectivestype) {
-		this.objectivestype = objectivestype;
-		return this;
-	}
-
 	public static enum FeatureModelType {
 		RANDOM, // for generating any kind of feature models
-		AND, // for generating feature models with only AND groups (optional and mandatory features)
+		AND, // for generating feature models with only AND groups (optional and mandatory
+				// features)
 		OR, // for generating feature models with only OR groups
 		XOR, // for generating feature models with only XOR groups
-		AND_OPT,// for generating feature models with only optional features
-		AND_MAND,// for generating feature models with only mandatory features
+		AND_OPT, // for generating feature models with only optional features
+		AND_MAND, // for generating feature models with only mandatory features
 		CARDINALITY
 	};
+
 	public static class CrossTreeConstraintType {
-		public int minliterals,maxliterals;
-		
-		public CrossTreeConstraintType(int minliterals,int maxliterals){
-			this.minliterals=minliterals;
-			this.maxliterals=maxliterals;
+		public int minliterals, maxliterals;
+
+		public CrossTreeConstraintType(int minliterals, int maxliterals) {
+			this.minliterals = minliterals;
+			this.maxliterals = maxliterals;
 		}
-		public CrossTreeConstraintType(int literals){
-			this(literals,literals);
+
+		public CrossTreeConstraintType(int literals) {
+			this(literals, literals);
 		}
-		public CrossTreeConstraintType(){
+
+		public CrossTreeConstraintType() {
 			this(2);
 		}
-		public static final CrossTreeConstraintType BINARY_CONSTRAINT=new CrossTreeConstraintType();
-		public static final CrossTreeConstraintType _3_CLAUSE_CONSTRAINT=new CrossTreeConstraintType(3);
-	};
-	public static enum AggregateFunctionType {
-		RANDOM, 
-		ALL_ADDITION_PRODUCT,
-		ALL_ADDITION,
-		ALL_PRODUCT,
-		ALL_MAXIMUM_MINIMUM,
-		ALL_MAXIMUM, 
-		ALL_MINIMUM
-	};
-	
-	public static FeatureModel generateFeatureModel(int numFeatures, FeatureModelType fmtype, int numTreeConstraints,
-			CrossTreeConstraintType ctctype,int numCrossTreeConstraints) {
 
-		FeatureModelType fmtypes[]=new FeatureModelType[numTreeConstraints];
-		for(int i=0;i<numTreeConstraints;i++)
-			fmtypes[i]=fmtype;
-		
-		CrossTreeConstraintType ctctypes[]=new CrossTreeConstraintType[numCrossTreeConstraints];
-		for(int i=0;i<numCrossTreeConstraints;i++)
-			ctctypes[i]=ctctype;
-		
-		return generateFeatureModel(numFeatures,fmtypes,ctctypes);
+		public static final CrossTreeConstraintType BINARY_CONSTRAINT = new CrossTreeConstraintType();
+		public static final CrossTreeConstraintType _3_CLAUSE_CONSTRAINT = new CrossTreeConstraintType(3);
+	};
+
+	public static enum AggregateFunctionType {
+		RANDOM, ALL_ADDITION_PRODUCT, ALL_ADDITION, ALL_PRODUCT, ALL_MAXIMUM_MINIMUM, ALL_MAXIMUM, ALL_MINIMUM
+	};
+
+	public static FeatureModel generateFeatureModel(int numFeatures, double[] treeConstraintTypeDistribution,
+			int numTreeConstraints, CrossTreeConstraintType ctctype, int numCrossTreeConstraints) {
+
+		FeatureModelType fmtypes[] = new FeatureModelType[numTreeConstraints];
+		for (int i = 0; i < numTreeConstraints; i++)
+			fmtypes[i] = FeatureModelType.values()[RandomUtils.randomFromRoulette(treeConstraintTypeDistribution)];
+
+		CrossTreeConstraintType ctctypes[] = new CrossTreeConstraintType[numCrossTreeConstraints];
+		for (int i = 0; i < numCrossTreeConstraints; i++)
+			ctctypes[i] = ctctype;
+
+		return generateFeatureModel(numFeatures, fmtypes, ctctypes);
 	}
-	
+
+	public static FeatureModel generateFeatureModel(int numFeatures, FeatureModelType fmtype, int numTreeConstraints,
+			CrossTreeConstraintType ctctype, int numCrossTreeConstraints) {
+
+		FeatureModelType fmtypes[] = new FeatureModelType[numTreeConstraints];
+		for (int i = 0; i < numTreeConstraints; i++)
+			fmtypes[i] = fmtype;
+
+		CrossTreeConstraintType ctctypes[] = new CrossTreeConstraintType[numCrossTreeConstraints];
+		for (int i = 0; i < numCrossTreeConstraints; i++)
+			ctctypes[i] = ctctype;
+
+		return generateFeatureModel(numFeatures, fmtypes, ctctypes);
+	}
+
 	public static FeatureModel generateFeatureModel(int numFeatures, FeatureModelType[] fmtypes,
 			CrossTreeConstraintType[] ctctypes) {
-		
+
 		FeatureModel fm = generateFeatureModel(numFeatures);
-		fm.addCrossTreeConstraint(new AssignedValue(0,true));
+		fm.addCrossTreeConstraint(new AssignedValue(0, true));
 		generateTreeConstraints(fm, fmtypes);
 		generateCrossTreeConstraints(fm, ctctypes);
 		return fm;
@@ -149,7 +133,7 @@ public class FMGenerator {
 	public static FeatureModel generateFeatureModel(int numFeatures) {
 		FeatureModel fm = new FeatureModel(numFeatures);
 		for (int i = 0; i < numFeatures; i++)
-			fm.addFeature(i,new Feature(String.valueOf(i)));
+			fm.addFeature(i, new Feature(String.valueOf(i)));
 		return fm;
 	}
 
@@ -182,7 +166,8 @@ public class FMGenerator {
 		}
 
 		for (int i = 0; i < ctctypes.length; i++) {
-			ClauseBasedConstraint constraint=generateCrossTreeConstraint(first_leaf, fm.getNumFeatures(), RandomUtils.randomRange(ctctypes[i].minliterals, ctctypes[i].maxliterals+1));
+			ClauseBasedConstraint constraint = generateCrossTreeConstraint(first_leaf, fm.getNumFeatures(),
+					RandomUtils.randomRange(ctctypes[i].minliterals, ctctypes[i].maxliterals + 1));
 			fm.addCrossTreeConstraint(constraint);
 		}
 		// validation of the feature model
@@ -190,37 +175,39 @@ public class FMGenerator {
 	}
 
 	private static ClauseBasedConstraint generateCrossTreeConstraint(int idlower, int idupper, int numliterals) {
-		
-//		if(numliterals==2){
-//			int left = RandomUtils.randomRange(idlower, idupper);//first_leaf + (int) (Math.random() * (fm.getNumFeatures() - first_leaf));
-//			int right;
-//			do {
-//				right = RandomUtils.randomRange(idlower, idupper);//first_leaf + (int) (Math.random() * (fm.getNumFeatures() - first_leaf));
-//			} while (right == left);
-//			return new Imply(left, right);
-//			
-//		}else{
-			Set<Integer> literals=new TreeSet<>();
-			Clause constraint=new Clause();
-			do{
-				int literal = RandomUtils.randomRange(idlower, idupper);
-				if(literals.add(literal)){
-					constraint.add(literal, RandomUtils.random.nextBoolean());
-				}
-			}while(literals.size()<numliterals);
-	
-			return constraint;
-//		}
+
+		// if(numliterals==2){
+		// int left = RandomUtils.randomRange(idlower, idupper);//first_leaf + (int)
+		// (Math.random() * (fm.getNumFeatures() - first_leaf));
+		// int right;
+		// do {
+		// right = RandomUtils.randomRange(idlower, idupper);//first_leaf + (int)
+		// (Math.random() * (fm.getNumFeatures() - first_leaf));
+		// } while (right == left);
+		// return new Imply(left, right);
+		//
+		// }else{
+		Set<Integer> literals = new TreeSet<>();
+		Clause constraint = new Clause();
+		do {
+			int literal = RandomUtils.randomRange(idlower, idupper);
+			if (literals.add(literal)) {
+				constraint.add(literal, RandomUtils.random.nextBoolean());
+			}
+		} while (literals.size() < numliterals);
+
+		return constraint;
+		// }
 	}
 
 	private static void generateTreeConstraint(FeatureModel fm, int index_parent, int index_children, int cant_children,
 			FeatureModelType fmtype) {
 
 		if (fmtype == FeatureModelType.RANDOM) {
-			fmtype = FeatureModelType.values()[RandomUtils.randomRange(1, 4)];//((int) Math.floor(Math.random() * 3.0)) + 1];
+			fmtype = FeatureModelType.values()[RandomUtils.randomRange(1, 4)];// ((int) Math.floor(Math.random() * 3.0))
+																				// + 1];
 		}
 
-		
 		int[] children = new int[cant_children];
 		for (int i = 0; i < cant_children; i++)
 			children[i] = index_children + i;
@@ -253,23 +240,23 @@ public class FMGenerator {
 			fm.addTreeConstraint(tc);
 			break;
 		case CARDINALITY:
-			int random1=RandomUtils.randomRange(0, children.length);
-			int random2=RandomUtils.randomRange(1, children.length);
-			
-			int minCardinality=Math.min(random1, random2);
-			int maxCardinality=Math.max(random1, random2);
-			tc = new CardinalityGroup(minCardinality,maxCardinality,index_parent, children);
+			int random1 = RandomUtils.randomRange(0, children.length);
+			int random2 = RandomUtils.randomRange(1, children.length);
+
+			int minCardinality = Math.min(random1, random2);
+			int maxCardinality = Math.max(random1, random2);
+			tc = new CardinalityGroup(minCardinality, maxCardinality, index_parent, children);
 			fm.addTreeConstraint(tc);
 			break;
 		}
 
 	}
-	
-	int aux=0;
-	
-	public FeatureModel generateFeatureModel(){
-		return FMGenerator.generateFeatureModel(numFeatures, fmtype, numTreeConstraints, ctctype, numCrossTreeConstraints);
+
+	int aux = 0;
+
+	public FeatureModel generateFeatureModel() {
+		return FMGenerator.generateFeatureModel(numFeatures, fmtype, numTreeConstraints, ctctype,
+				numCrossTreeConstraints);
 	}
-	
 
 }

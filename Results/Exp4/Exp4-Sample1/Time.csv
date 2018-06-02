@@ -1,0 +1,2 @@
+"Model(Num features)","B&B+HB+MCF","B&B+HB+MVW","B&B+HB+MHV","BestFS+HB+MCF","BestFS+HB+MVW","BestFS+HB+MHV","BT+HA+MCF","BT+HA+MVW","BT+HA+MHV","BT+HB+MCF","BT+HB+MVW","BT+HB+MHV","JavaPseudoBooleanLPalgorithm-SAT4J"
+"NA","0,2286 ± 0,7136","3,8384 ± 105,3980","0,5206 ± 1,1285","0,2040 ± 0,7786","4,1256 ± 114,9033","0,4793 ± 0,6937","0,1202 ± 0,1527","0,1130 ± 0,1458","0,4283 ± 0,6145","0,1217 ± 0,1563","0,1165 ± 0,1477","0,4764 ± 0,6852","0,7603 ± 0,6380"

@@ -1,74 +1,88 @@
 package edu.isistan.fmframework.evaluation;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import edu.isistan.fmframework.core.FeatureModel;
 import edu.isistan.fmframework.optimization.BasicProblem;
+import edu.isistan.fmframework.optimization.Problem;
+import edu.isistan.fmframework.optimization.objectiveFunctions.MultiLinearPolynomialObjective;
 import fm.FeatureModelException;
 
 public class SPLOTModels {
 
-	public static List<FeatureModel> getModels() throws FeatureModelException {
+	private static final String SPLOT_MODELS_DIR = "Models/SPLOT-models";
+	
+	public static List<Pair<File,FeatureModel>> getModels() throws FeatureModelException {
 		return loadModels();
 	}
-	
-	public static List<FeatureModel> getModels(int from, int to) throws FeatureModelException {
+
+	public static List<Pair<File,FeatureModel>> getModels(int from, int to) throws FeatureModelException {
 		return loadModels().subList(from, to);
 	}
-	
-	public static BasicProblem[] generateBasicProblems(List<FeatureModel> models, int inequalityRestrictions) throws FeatureModelException{
-		
+
+	public static BasicProblem[] generateBasicProblems(List<Pair<File,FeatureModel>> models, int inequalityRestrictions)
+			throws FeatureModelException {
+
 		BasicProblem[] instances = new BasicProblem[models.size()];
 		for (int i = 0; i < models.size(); i++) {
-			instances[i] = BasicProblemGenerator
-					.generateBasicProblemInstance(models.get(i), inequalityRestrictions);
+			instances[i] = ProblemGenerator.generateBasicProblemInstance(models.get(i).getValue(), inequalityRestrictions);
 		}
 
 		return instances;
 	}
-	
-	public static BasicProblem[][] generateValidBasicProblems(int rounds,
-			List<FeatureModel> models, double[] restrictionRatios) throws FeatureModelException {
+
+	public static BasicProblem[][] generateValidBasicProblems(int rounds, List<Pair<File,FeatureModel>> models,
+			double[] restrictionRatios) throws FeatureModelException {
 		BasicProblem[][] instances = new BasicProblem[rounds][];
 		for (int r = 0; r < rounds; r++) {
-			System.out.println("Generating ... round "+r);
+			System.out.println("Generating ... round " + r);
 			instances[r] = generateValidBasicProblems(models, restrictionRatios);
 		}
 
 		return instances;
 	}
-	
-	public static BasicProblem[] generateValidBasicProblems(List<FeatureModel> models, double[] restrictionRatios) throws FeatureModelException{
-		
+
+	public static BasicProblem[] generateValidBasicProblems(List<Pair<File,FeatureModel>> models, double[] restrictionRatios)
+			throws FeatureModelException {
+
 		BasicProblem[] instances = new BasicProblem[models.size()];
 		for (int i = 0; i < models.size(); i++) {
-			System.out.println("Generating ... instance "+ i);
-			instances[i] = BasicProblemGenerator
-				.generateValidBasicProblemInstance(models.get(i), restrictionRatios);
+			System.out.println("Generating ... instance " + i);
+			instances[i] = ProblemGenerator.generateValidBasicProblemInstance(models.get(i).getValue(), restrictionRatios);
 		}
 
 		return instances;
 	}
-	
-	public static BasicProblem[] generateValidBasicProblems(List<FeatureModel> models, int inequalityRestrictions) throws FeatureModelException{
-		
+
+	public static BasicProblem[] generateValidBasicProblems(List<Pair<File,FeatureModel>> models, int inequalityRestrictions)
+			throws FeatureModelException {
+
 		BasicProblem[] instances = new BasicProblem[models.size()];
 		for (int i = 0; i < models.size(); i++) {
-			System.out.println("Generating ... instance "+ i);
-			instances[i] = BasicProblemGenerator
-				.generateValidBasicProblemInstance(models.get(i), inequalityRestrictions);
+			System.out.println("Generating ... instance " + i);
+			instances[i] = ProblemGenerator.generateValidBasicProblemInstance(models.get(i).getValue(), inequalityRestrictions);
 		}
 
 		return instances;
 	}
-	
-	
-	public static BasicProblem[][] generateBasicProblems(int rounds,List<FeatureModel> models, int inequalityRestrictions) throws FeatureModelException{
-		
+
+	public static BasicProblem[][] generateBasicProblems(int rounds, List<Pair<File,FeatureModel>> models,
+			int inequalityRestrictions) throws FeatureModelException {
+
 		BasicProblem[][] instances = new BasicProblem[rounds][];
 		for (int r = 0; r < rounds; r++) {
 			instances[r] = generateBasicProblems(models, inequalityRestrictions);
@@ -76,38 +90,73 @@ public class SPLOTModels {
 
 		return instances;
 	}
-	
-	public static BasicProblem[][] generateValidBasicProblems(int rounds, List<FeatureModel> models,
+
+	public static BasicProblem[][] generateValidBasicProblems(int rounds, List<Pair<File,FeatureModel>> models,
 			int inequalityRestrictions) throws FeatureModelException {
 		BasicProblem[][] instances = new BasicProblem[rounds][];
 		for (int r = 0; r < rounds; r++) {
-			System.out.println("Generating ... round "+r);
+			System.out.println("Generating ... round " + r);
 			instances[r] = generateValidBasicProblems(models, inequalityRestrictions);
 		}
 
 		return instances;
 	}
-
-	private static List<FeatureModel> models;
 	
-	private static List<FeatureModel> loadModels() throws FeatureModelException {
-		
+	public static Problem[][] generateValidGeneralProblemInstances_SPLOT_plus_THOR(
+			List<Pair<File,FeatureModel>> models, Map<File,MultiLinearPolynomialObjective[]> modelsTHORObjectives) {
+		return generateValidGeneralProblemInstances_SPLOT_plus_THOR(1,models,modelsTHORObjectives,0);
+	}
+	
+	public static Problem[][] generateValidGeneralProblemInstances_SPLOT_plus_THOR(int rounds,
+			List<Pair<File,FeatureModel>> models, Map<File,MultiLinearPolynomialObjective[]> modelsTHORObjectives, int inequalityRestrictions) {
+		if(rounds!=1)
+			throw new IllegalArgumentException("Only one round is generated by the moment");
+		if(inequalityRestrictions!=0)
+			throw new IllegalArgumentException("No inequalityRestrictions are generated by the moment");
+
+		Problem[][] instances = new Problem[rounds][];
+		for (int r = 0; r < rounds; r++) {
+			System.out.println("Generating ... round "+r);
+			instances[r] = generateValidGeneralProblemInstances_SPLOT_plus_THOR(models,modelsTHORObjectives, inequalityRestrictions);
+		}
+
+		return instances;
+	}
+	
+	private static Problem[] generateValidGeneralProblemInstances_SPLOT_plus_THOR(
+			List<Pair<File,FeatureModel>> models, Map<File,MultiLinearPolynomialObjective[]> modelsTHORObjectives, int inequalityRestrictions) {
+		Problem[] instances = new Problem[models.size()];
+		for (int i = 0; i < models.size(); i++) {
+			System.out.println("Generating ... instance "+ i);
+			MultiLinearPolynomialObjective[] multiLinearPolynomialObjectives = modelsTHORObjectives.get(models.get(i).getKey());
+			if(multiLinearPolynomialObjectives==null)
+				System.out.println("THOR files where not found for model "+models.get(i).getKey().getAbsolutePath());
+			instances[i] = ProblemGenerator.generateValidGeneralProblemInstance_SPLOT_plus_THOR(models.get(i).getValue(), multiLinearPolynomialObjectives, inequalityRestrictions);
+		}
+
+		return instances;
+	}
+	
+
+	private static List<Pair<File,FeatureModel>> models;
+	private static List<Pair<File,FeatureModel>> loadModels() throws FeatureModelException {
+
 		if(models==null){
 			
-			File folder = new File("SPLOT-models");
+			File folder = new File(SPLOT_MODELS_DIR);
 			File[] files = folder.listFiles();
 			models = new ArrayList<>();
 			for (int i = 0; i < files.length; i++) {
 	
 				File file = files[i];
 				FeatureModel model = SXFMtoFM.parse(file.getPath(), true);
-				models.add(model);
+				models.add(Pair.of(file, model));
 			}
 			
-			Collections.sort(models, new Comparator<FeatureModel>() {
+			Collections.sort(models, new Comparator<Pair<File,FeatureModel>>() {
 				@Override
-				public int compare(FeatureModel o1, FeatureModel o2) {
-					return Integer.compare(o1.getNumFeatures(), o2.getNumFeatures());
+				public int compare(Pair<File,FeatureModel> o1, Pair<File,FeatureModel> o2) {
+					return Integer.compare(o1.getValue().getNumFeatures(), o2.getValue().getNumFeatures());
 				}
 			});
 			
@@ -115,4 +164,108 @@ public class SPLOTModels {
 		return models;
 	}
 
+	private static Map<String,Map<File,MultiLinearPolynomialObjective[]>> modelsThorObjectives=new HashMap<>();
+	
+	public static Map<File, MultiLinearPolynomialObjective[]> getModelsThorObjectives(String folderPath) throws IOException {
+		if(!modelsThorObjectives.containsKey(folderPath)){
+			
+			File folderThorOutput = new File(folderPath);
+			File[] filesThorOutput = folderThorOutput.listFiles();
+			Map<File, MultiLinearPolynomialObjective[]> modelsTHORObjectives2 = new HashMap<>();
+
+			for (Pair<File,FeatureModel> model:models) {
+				
+				File[] filesThorOutputForModel=searchThorFilesForModel(filesThorOutput,model.getKey());
+
+				MultiLinearPolynomialObjective[] objectives=loadObjectives(filesThorOutputForModel,model.getValue());
+				modelsTHORObjectives2.put(model.getKey(), objectives);
+			}
+			
+			modelsThorObjectives.put(folderPath, modelsTHORObjectives2);
+		}
+		return modelsThorObjectives.get(folderPath);
+	}
+
+
+	public static MultiLinearPolynomialObjective[] loadObjectives(File[] filesThorOutputForModel,FeatureModel model) throws IOException {
+		MultiLinearPolynomialObjective objective=new MultiLinearPolynomialObjective(model.getNumFeatures());
+		
+		if(filesThorOutputForModel[0]!=null) {
+			List<String> lines = Files.readAllLines(filesThorOutputForModel[0].toPath());
+			
+			for(int i=0;i<lines.size();i++) {
+				String[] split = lines.get(i).split(":");
+				int featureId=0;
+				if(i!=0) {
+					featureId = model.getFeatureIdByName(split[0]);
+					if(featureId==-1)
+						continue;
+				}
+				SortedSet<Integer> variables=new TreeSet<Integer>();
+				variables.add(featureId);
+				objective.addTerm(Double.parseDouble(split[1]), variables);
+			}
+			
+		}
+		
+		if(filesThorOutputForModel[1]!=null) {
+			List<String> lines = Files.readAllLines(filesThorOutputForModel[1].toPath());
+			
+			for(int i=0;i<lines.size();i++) {
+				String[] split = lines.get(i).split(":");
+				String[] svariables = split[0].split("#");
+				
+				SortedSet<Integer> variables=new TreeSet<Integer>();
+				for(String svariable:svariables) {
+					
+					if(svariable.equals("root")) {
+						variables.add(0);
+					}else {
+						int featureId = model.getFeatureIdByName(svariable);
+						if(featureId==-1)
+							continue;
+						variables.add(featureId);
+					}
+				}				
+				if(variables.size()>1) {
+					objective.addTerm(Double.parseDouble(split[1]), variables);
+				}
+			}
+			
+		}
+		
+		return new MultiLinearPolynomialObjective[] {objective};
+	}
+
+	private static File[] searchThorFilesForModel(File[] filesThorOutput, File fileModel) {
+		Set<File> files=new HashSet<>();
+		for(File thorFile:filesThorOutput) {
+			if(thorFile.getName().contains(fileModel.getName())) {
+				files.add(thorFile);
+			}
+		}
+		
+		File[] result=new File[2];
+		for(File thorModelFile:files) {
+			if(thorModelFile.getName().contains("featSolution.txt")) {
+				result[0]=thorModelFile;
+			}else {
+				if(thorModelFile.getName().contains("interactionSolution.txt"))
+					result[1]=thorModelFile;
+			}
+		}
+		if(result[0]==null)
+			System.out.println("File "+fileModel.getName()+"-featSolution.txt does not exist");
+		if(result[1]==null)
+			System.out.println("File "+fileModel.getName()+"-interactionSolution.txt does not exist");
+		
+		return result;
+	}
+
+	public static Problem[][] generateValidProblemInstancesWithThorAttributes(int i,
+			List<Pair<File, FeatureModel>> models2, Map<File, MultiLinearPolynomialObjective[]> modelsThorObjectives2,
+			int j) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

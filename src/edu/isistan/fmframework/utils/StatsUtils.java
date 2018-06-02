@@ -102,6 +102,18 @@ public class StatsUtils {
         }
         return Math.sqrt(temp / size);
     }
+    
+    public static double deviationD(double[] times) {
+        double mean = averageD(times);
+        double temp = 0;
+
+        int size = times.length;
+        for (int i = 0; i < size; i++) {
+            double t = times[i];
+            temp += (mean - t) * (mean - t);
+        }
+        return Math.sqrt(temp / size);
+    }
 
     public static double averageB(List<Boolean> times) {
         int size = times.size();
@@ -131,4 +143,5 @@ public class StatsUtils {
         }
         return ((double)total) / ((double) size);
     }
+    
 }
