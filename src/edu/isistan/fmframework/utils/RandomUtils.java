@@ -15,8 +15,8 @@ public class RandomUtils {
 	}
 
 	public static double random() {
-		return random.nextDouble();
-		// return random.nextFloat();
+//		return random.nextDouble();
+		return random.nextFloat();
 	}
 
 	public static double[] randomArray(int size) {
@@ -27,7 +27,7 @@ public class RandomUtils {
 	}
 
 	public static double randomDouble(double inferiorInclusive, double superiorExclusive) {
-		return inferiorInclusive + random.nextDouble() * (superiorExclusive - inferiorInclusive);
+		return inferiorInclusive + random() * (superiorExclusive - inferiorInclusive);
 	}
 
 	public static int randomFromRoulette(double[] roulette) {

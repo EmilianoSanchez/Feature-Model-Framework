@@ -23,7 +23,7 @@ public class HeuristicA implements HeuristicFunction<Problem<?, ?>> {
 	@Override
 	public void setup(Problem<?, ?> instance) {
 		this.heuristicFunction = buildHeuristicFunction(instance.model, instance.objectiveFunctions[0],
-				CRITERIA_MAXIMISE);
+				CRITERIA_MINIMISE);
 	}
 
 	protected ObjectiveFunction buildHeuristicFunction(FeatureModel fmodel, ObjectiveFunction objectiveFunction,

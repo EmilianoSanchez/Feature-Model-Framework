@@ -21,24 +21,27 @@ public class Problem<C extends Constraint, O extends ObjectiveFunction> {
 	public Problem(FeatureModel model) {
 		this.model = model;
 	}
-	
-	public Problem(FeatureModel model, O objective,
-			C[] restrictions) {
+
+	public Problem(FeatureModel model, O objective) {
+		this(model, objective, (C[]) new Constraint[] {});
+	}
+
+	public Problem(FeatureModel model, O objective, C[] restrictions) {
 		this.model = model;
-		this.objectiveFunctions = (O[]) new Object[] { objective };
+		this.objectiveFunctions = (O[]) new ObjectiveFunction[] { objective };
 		this.globalConstraints = restrictions;
 	}
 
 	public boolean isValid() {
 		return Utils.isValid(this);
 	}
-	
+
 	public boolean isSatisfied(Configuration conf) {
 		return this.model.isSatisfied(conf) && satisfyGlobalConstraints(conf);
 	}
 
 	public boolean satisfyGlobalConstraints(Configuration conf) {
-		if(this.globalConstraints!=null){
+		if (this.globalConstraints != null) {
 			for (C globalConstraint : this.globalConstraints) {
 				if (!globalConstraint.isSatisfied(conf))
 					return false;
@@ -59,9 +62,9 @@ public class Problem<C extends Constraint, O extends ObjectiveFunction> {
 	public String toString() {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(this.model.toString()).append("\n");
-		for(int i=0;i<this.objectiveFunctions.length;i++)
+		for (int i = 0; i < this.objectiveFunctions.length; i++)
 			stringBuilder.append(this.objectiveFunctions[i].toString()).append("\n");
-		for(int i=0;i<this.globalConstraints.length;i++)
+		for (int i = 0; i < this.globalConstraints.length; i++)
 			stringBuilder.append(this.globalConstraints[i].toString()).append("\n");
 		return stringBuilder.toString();
 	}

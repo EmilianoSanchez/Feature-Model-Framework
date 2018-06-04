@@ -1,6 +1,5 @@
 package edu.isistan.fmframework.optimization.optCSA.constraintPropagator;
 
-
 import edu.isistan.fmframework.core.Configuration;
 import edu.isistan.fmframework.core.FeatureModel;
 import edu.isistan.fmframework.core.FeatureState;
@@ -28,6 +27,8 @@ public interface ConstraintPropagator {
 				}
 			}
 		}
+		if (!assignFeature(conf, 0, FeatureState.SELECTED))
+			return null;
 		return conf;
 	}
 }
