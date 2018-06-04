@@ -21,14 +21,18 @@ public class Experiment_3 {
 
 		Algorithm<BasicProblem> algorithms[] = new Algorithm[] {
 
-				CSAalgorithm.build(CSAalgorithm.Strategy.BandB, new HeuristicB(), new MostConstrainedFeature()),
-				CSAalgorithm.build(CSAalgorithm.Strategy.BandB, new HeuristicB(), new MaxValuePerWeight()),
-				CSAalgorithm.build(CSAalgorithm.Strategy.BandB, new HeuristicB(),
+				CSAalgorithm.build("BandB+HB+MCF", CSAalgorithm.Strategy.BandB, new HeuristicB(),
+						new MostConstrainedFeature()),
+				CSAalgorithm.build("BandB+HB+MVW", CSAalgorithm.Strategy.BandB, new HeuristicB(),
+						new MaxValuePerWeight()),
+				CSAalgorithm.build("BandB+HB+MHV", CSAalgorithm.Strategy.BandB, new HeuristicB(),
 						new MaxHeuristicValue(new HeuristicB())),
 
-				CSAalgorithm.build(CSAalgorithm.Strategy.BestFS, new HeuristicB(), new MostConstrainedFeature()),
-				CSAalgorithm.build(CSAalgorithm.Strategy.BestFS, new HeuristicB(), new MaxValuePerWeight()),
-				CSAalgorithm.build(CSAalgorithm.Strategy.BestFS, new HeuristicB(),
+				CSAalgorithm.build("BestFS+HB+MCF", CSAalgorithm.Strategy.BestFS, new HeuristicB(),
+						new MostConstrainedFeature()),
+				CSAalgorithm.build("BestFS+HB+MVW", CSAalgorithm.Strategy.BestFS, new HeuristicB(),
+						new MaxValuePerWeight()),
+				CSAalgorithm.build("BestFS+HB+MHV", CSAalgorithm.Strategy.BestFS, new HeuristicB(),
 						new MaxHeuristicValue(new HeuristicB())),
 
 				new Java01LPalgorithm(), new JavaBoolOptAlgorithm() };

@@ -14,14 +14,14 @@ public class CSABacktracking extends CSAalgorithm {
 
 	@Override
 	public Configuration selectConfiguration(Problem<?, ?> instance) {
-//		int openStates = 1;
-		Configuration initial=this.cpropagator.getPartialConfiguration(instance.model);
-		if(initial!=null && instance.satisfyGlobalConstraints(initial)){
+		// int openStates = 1;
+		Configuration initial = this.cpropagator.getPartialConfiguration(instance.model);
+		if (initial != null && instance.satisfyGlobalConstraints(initial)) {
 			this.unassignedVariableSelector.setup(instance);
 			this.heuristic.setup(instance);
 			this.open.clear();
 			this.open.push(new State(initial, 0.0));
-			
+
 			while (!this.open.isEmpty()) {
 				Configuration current = this.open.pop().conf;
 				int unassignedVariable = unassignedVariableSelector.selectUnassignedVariable(current);
@@ -33,13 +33,13 @@ public class CSABacktracking extends CSAalgorithm {
 					if (cpropagator.assignFeature(succesor1, unassignedVariable, FeatureState.SELECTED)
 							&& instance.satisfyGlobalConstraints(succesor1)) {
 						this.open.push(new State(succesor1, this.heuristic.evaluate(succesor1)));
-	//					openStates++;
+						// openStates++;
 					}
 					Configuration succesor2 = (Configuration) current.clone();
 					if (cpropagator.assignFeature(succesor2, unassignedVariable, FeatureState.DESELECTED)
 							&& instance.satisfyGlobalConstraints(succesor2)) {
 						this.open.push(new State(succesor2, this.heuristic.evaluate(succesor2)));
-	//					openStates++;
+						// openStates++;
 					}
 				}
 			}
@@ -47,48 +47,44 @@ public class CSABacktracking extends CSAalgorithm {
 		// System.out.println("Open states "+openStates);
 		return null;
 	}
-	
-	public CSABacktracking() {
-		super(new PriorityStack<State>());
+
+	public CSABacktracking(String name) {
+		super(name, new PriorityStack<State>());
 	}
 
-	public CSABacktracking(HeuristicFunction heuristic) {
-		super(new PriorityStack<State>(), heuristic);
+	public CSABacktracking(String name, HeuristicFunction heuristic) {
+		super(name, new PriorityStack<State>(), heuristic);
 	}
-	
-	public CSABacktracking(VariableSelector<Problem<?, ?>> unassignedVariableSelector) {
-		super(new PriorityStack<State>(), unassignedVariableSelector);
-	}
-	
 
-	public CSABacktracking(HeuristicFunction heuristic,
+	public CSABacktracking(String name, VariableSelector<Problem<?, ?>> unassignedVariableSelector) {
+		super(name, new PriorityStack<State>(), unassignedVariableSelector);
+	}
+
+	public CSABacktracking(String name, HeuristicFunction heuristic,
 			VariableSelector<Problem<?, ?>> unassignedVariableSelector) {
-		super(new PriorityStack<State>(), heuristic, unassignedVariableSelector);
-	}
-	
-	protected CSABacktracking(Container<State> container) {
-		super(container);
-	}
-	
-	protected CSABacktracking(Container<State> container,HeuristicFunction heuristic) {
-		super(container, heuristic);
-	}
-	
-	public CSABacktracking(Container<State> container,VariableSelector unassignedVariableSelector) {
-		super(container, unassignedVariableSelector);
+		super(name, new PriorityStack<State>(), heuristic, unassignedVariableSelector);
 	}
 
-	protected CSABacktracking(Container<State> container,HeuristicFunction heuristic,
-			VariableSelector<Problem<?, ?>> unassignedVariableSelector) {
-		super(container, heuristic ,unassignedVariableSelector);
+	protected CSABacktracking(String name, Container<State> container) {
+		super(name, container);
 	}
-	
-	protected CSABacktracking(Container<State> container,HeuristicFunction heuristic,
+
+	protected CSABacktracking(String name, Container<State> container, HeuristicFunction heuristic) {
+		super(name, container, heuristic);
+	}
+
+	public CSABacktracking(String name, Container<State> container, VariableSelector unassignedVariableSelector) {
+		super(name, container, unassignedVariableSelector);
+	}
+
+	protected CSABacktracking(String name, Container<State> container, HeuristicFunction heuristic,
+			VariableSelector<Problem<?, ?>> unassignedVariableSelector) {
+		super(name, container, heuristic, unassignedVariableSelector);
+	}
+
+	protected CSABacktracking(String name, Container<State> container, HeuristicFunction heuristic,
 			VariableSelector<Problem<?, ?>> unassignedVariableSelector, ConstraintPropagator constraintPropagator) {
-		super(container, heuristic,unassignedVariableSelector,constraintPropagator);
+		super(name, container, heuristic, unassignedVariableSelector, constraintPropagator);
 	}
-	
-	public String getName() {
-		return "BT"+super.getName();
-	};
+
 }

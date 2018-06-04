@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import edu.isistan.fmframework.optimization.optSPLConfig.model.FM;
 import edu.isistan.fmframework.optimization.optSPLConfig.model.Feature;
 
-
 public class GreedyHeuristic {
 	
 	private static double budget; //Sum costs of the features in root
@@ -17,7 +16,7 @@ public class GreedyHeuristic {
 	
 	private static LinkedList<Feature> featureList = new LinkedList<Feature>(); //List of features in tree (except root)
 	private static LinkedList<Feature> featureListAux = new LinkedList<Feature>(); 
-	private static LinkedList<Integer> root = new LinkedList<Integer>(); //List of features in root
+	private static LinkedList<String> root = new LinkedList<String>(); //List of features in root
 	
 	
 	public GreedyHeuristic(FM fm, String budgetText){
@@ -106,15 +105,15 @@ public class GreedyHeuristic {
 	
 	public static void criateListAux(){
 		
-		java.util.LinkedList<Integer> g = new java.util.LinkedList<Integer>();
+		java.util.LinkedList<String> g = new java.util.LinkedList<String>();
 		
 		//featureListAux = featureList;
 		for (int i=0; i<featureList.size(); i++){
-			int n = featureList.get(i).getName();
+			String n = featureList.get(i).getName();
 			boolean t = featureList.get(i).isMandatory();
 			double c = featureList.get(i).getCost();
 			double b = featureList.get(i).getBenefit();
-			int f = featureList.get(i).getFather();
+			String f = featureList.get(i).getFather();
 			int a = featureList.get(i).getAlt();
 			
 			if (a != 0){
@@ -133,12 +132,12 @@ public class GreedyHeuristic {
 			
 			if (featureList.get(i).isMandatory()){//Is it mandatory?
 				
-				int n = featureList.get(i).getName();
+				String n = featureList.get(i).getName();
 				double c = featureList.get(i).getCost();
 				double b = featureList.get(i).getBenefit();
-				int f = featureList.get(i).getFather();
+				String f = featureList.get(i).getFather();
 				
-				if (f == root.get(0)){//If the father is the root...
+				if (f.equals(root.get(0))){//If the father is the root...
 					//Insert feature in root
 				    root.add(n);
 				    //sum feature cost with the root cost 
@@ -147,7 +146,7 @@ public class GreedyHeuristic {
 				}else{
 					//Change father cost and benefit
 					for (int j=0; j<featureList.size(); j++){
-						if (f == featureList.get(j).getName()){
+						if (f.equals(featureList.get(j).getName())){
 							featureList.get(j).setCost((featureList.get(j).getCost()) + c);
 							featureList.get(j).setBenefit((featureList.get(j).getBenefit()) + b);
 	                    }
@@ -156,7 +155,7 @@ public class GreedyHeuristic {
 				
 				//Change father
 				for (int j=0; j<featureList.size(); j++){
-	                if (n == featureList.get(j).getFather()){
+	                if (n.equals(featureList.get(j).getFather())){
 	                	featureList.get(j).setFather(f);
 	                }
 	            }
@@ -169,7 +168,7 @@ public class GreedyHeuristic {
 	}
 	
 	//Cost minimum
-	public static double calculateCostMin(int f){
+	public static double calculateCostMin(String f){
 	     
 	     double aux_cost = 0;
 	     double c_min = 0;
@@ -177,7 +176,7 @@ public class GreedyHeuristic {
 	     
 	     for(int i1=0; i1<featureList.size(); i1++){
 	    	 
-	    	 if ((f==featureList.get(i1).getFather()) && (featureList.get(i1).getAlt() != 0)){ //Is f father and it is alternative?
+	    	 if ((f.equals(featureList.get(i1).getFather())) && (featureList.get(i1).getAlt() != 0)){ //Is f father and it is alternative?
 	    		 
 	    		 aux_cost = featureList.get(i1).getCost();
 	    		 
@@ -185,9 +184,9 @@ public class GreedyHeuristic {
 	    			 
 	    			 for(int i3=0; i3<featureList.size(); i3++){
 	    				 
-	    				 int nameGroup = featureList.get(i1).getGroup().get(i2);
-	    				 int nameList = featureList.get(i3).getName();
-	    				 if (nameGroup == nameList){
+	    				 String nameGroup = featureList.get(i1).getGroup().get(i2);
+	    				 String nameList = featureList.get(i3).getName();
+	    				 if (nameGroup.equals(nameList)){
 	                          if (aux_cost <  featureList.get(i3).getCostMin()){
 	                              min = aux_cost;
 	                          } 
@@ -214,7 +213,7 @@ public class GreedyHeuristic {
 			
 			if ((featureList.get(i).getCostMin() + c_root) > budget){
 				
-				LinkedList<Integer> listdelete = new LinkedList<Integer>();
+				LinkedList<String> listdelete = new LinkedList<String>();
 				listdelete.add(featureList.get(i).getName());
 				
 				for(int i1=0; i1<listdelete.size(); i1++){
@@ -226,7 +225,7 @@ public class GreedyHeuristic {
 							}
 						}*/
 						
-						if ((featureList.get(i2).getName()) == (listdelete.get(i1))){
+						if ((featureList.get(i2).getName()).equals(listdelete.get(i1))){
 							
 							int a = featureList.get(i2).getAlt();
 							
@@ -236,7 +235,7 @@ public class GreedyHeuristic {
 								for(int i3=0; i3<featureList.get(i2).getGroup().size(); i3++){
 									for(int i4=0; i4<featureList.size(); i4++){
 										
-										if ((featureList.get(i4).getName()) == (featureList.get(i2).getGroup().get(i3))){
+										if ((featureList.get(i4).getName()).equals(featureList.get(i2).getGroup().get(i3))){
 											featureList.get(i4).getGroup().remove(featureList.get(i2).getName());
 											break;          
 										}     
@@ -253,7 +252,7 @@ public class GreedyHeuristic {
 					
 					//delete listdelete and create a new
 					if (i1 == (listdelete.size()-1)){
-						LinkedList<Integer> children = new LinkedList<Integer>();
+						LinkedList<String> children = new LinkedList<String>();
 						children = filhos(listdelete);
 						listdelete.clear();
 						listdelete = children;
@@ -273,14 +272,14 @@ public class GreedyHeuristic {
 		}
 	} 
 
-	public static LinkedList<Integer> filhos(LinkedList<Integer> listdelete){
+	public static LinkedList<String> filhos(LinkedList<String> listdelete){
 
 		//children.clear();
-		LinkedList<Integer> auxChildren = new LinkedList<Integer>();
+		LinkedList<String> auxChildren = new LinkedList<String>();
 
 		for(int it1=0; it1<listdelete.size(); it1++){  
 			for(int it2=0; it2<featureList.size(); it2++){  
-				if ((featureList.get(it2).getFather()) == (listdelete.get(it1))){
+				if ((featureList.get(it2).getFather()).equals(listdelete.get(it1))){
 					auxChildren.add(featureList.get(it2).getName());
 				}           
 			}
@@ -293,11 +292,11 @@ public class GreedyHeuristic {
 	     
 	    double valAlt = -1;
 	    double valOthers = -1;
-	    int nameAlt = 0;
-	    int nameOthers = 0;
+	    String nameAlt = "";
+	    String nameOthers = "";
 	    
 	    for (int i2=0; i2<featureList.size(); i2++){
-	    	if ((featureList.get(i2).getFather()) == (root.get(0))){
+	    	if ((featureList.get(i2).getFather()).equals(root.get(0))){
 	    		if (featureList.get(i2).getAlt() != 0){
 	    			if (((featureList.get(i2).getBenefit())/(featureList.get(i2).getCost())) > valAlt){
 	    				valAlt = (featureList.get(i2).getBenefit())/(featureList.get(i2).getCost());
@@ -316,14 +315,14 @@ public class GreedyHeuristic {
 	    int i3;
 	    if (valAlt != -1){
 	    	for (i3=0; i3<featureList.size(); i3++){
-	    		if ((featureList.get(i3).getName()) ==(nameAlt)){
+	    		if ((featureList.get(i3).getName()).equals(nameAlt)){
 	    			featureList.get(i3).setMandatory(true); 
 	                if (!featureList.get(i3).getGroup().isEmpty()){
 	                	
 	                	if (featureList.get(i3).getAlt() == 1){ //OR
 	                		for(int i4=0; i4<featureList.get(i3).getGroup().size(); i4++){
 	                			for (int i5=0; i5<featureList.size(); i5++){
-	                                if ((featureList.get(i5).getName()) ==(featureList.get(i3).getGroup().get(i4))){
+	                                if ((featureList.get(i5).getName()).equals(featureList.get(i3).getGroup().get(i4))){
 	                                    featureList.get(i5).setAlt(0);
 	                                    featureList.get(i5).getGroup().clear();        
 	                                }     
@@ -332,7 +331,7 @@ public class GreedyHeuristic {
 	                	}else{ //XOR
 	                		for(int i4=0; i4<featureList.get(i3).getGroup().size(); i4++){
 	                			for (int i5=0; i5<featureList.size(); i5++){
-	                				if ((featureList.get(i5).getName()) ==(featureList.get(i3).getGroup().get(i4))){
+	                				if ((featureList.get(i5).getName()).equals(featureList.get(i3).getGroup().get(i4))){
 	                					featureList.get(i5).setCost(budget + 1);
 	                					featureList.get(i5).setAlt(0);
 	                                    featureList.get(i5).getGroup().clear();
@@ -349,7 +348,7 @@ public class GreedyHeuristic {
 	    	}
 	    }else{
 	    	for(i3=0; i3<featureList.size(); i3++){ 
-	            if ((featureList.get(i3).getName()) ==(nameOthers)){
+	            if ((featureList.get(i3).getName()).equals(nameOthers)){
 	            	featureList.get(i3).setMandatory(true); 
 	                break; 
 	            }     
@@ -361,9 +360,9 @@ public class GreedyHeuristic {
 	    
 		for (int iR=0; iR<root.size(); iR++){
 	    	for (int i1=0; i1<featureList.size(); i1++){
-	    		if (((featureList.get(i1).getName()) ==(root.get(iR)))){
+	    		if (((featureList.get(i1).getName()).equals(root.get(iR)))){
 	    			for (int i2=0; i2<featureList.size(); i2++){
-	    				if ((featureList.get(i2).getFather()) ==(featureList.get(i1).getName()) && (featureList.get(i2).isMandatory())){
+	    				if ((featureList.get(i2).getFather()).equals(featureList.get(i1).getName()) && (featureList.get(i2).isMandatory())){
 	    					root.add(featureList.get(i2).getName());
 	    				}
 	    			}
@@ -427,7 +426,7 @@ public class GreedyHeuristic {
 		System.out.println("Cost Minimum: " + c_min_root);
 	}
 	
-	public LinkedList<Integer> getResult(){
+	public LinkedList<String> getResult(){
 		return root;
 	}
 	

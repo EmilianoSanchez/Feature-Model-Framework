@@ -238,7 +238,7 @@ public class Java_RLT_01LPalgorithm implements Algorithm<edu.isistan.fmframework
 
 	@Override
 	public String getName() {
-		return "RLT 01LP-" + ilpsolver.toString();
+		return "RLT 01LP";
 	}
 
 	private static final double MULTIPLIER = 1000000.0;

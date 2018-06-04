@@ -20,54 +20,58 @@ public abstract class CSAalgorithm implements Algorithm<Problem<?, ?>> {
 		BT, BestFS, BandB
 	}
 
-	public static CSAalgorithm build(Strategy strategy) {
-		return build(strategy, Heuristics.heuristicB, VariableSelectors.mostConstrainedFeatureVariableSelector);
+	public static CSAalgorithm build(String name, Strategy strategy) {
+		return build(name, strategy, Heuristics.heuristicB, VariableSelectors.mostConstrainedFeatureVariableSelector);
 	}
 
-	public static CSAalgorithm build(Strategy strategy, HeuristicFunction heuristic) {
-		return build(strategy, heuristic, VariableSelectors.mostConstrainedFeatureVariableSelector);
-	}
-	
-	public static CSAalgorithm build(Strategy strategy, VariableSelector<Problem<?, ?>> unassignedVariableSelector){
-		return build(strategy, Heuristics.heuristicB, unassignedVariableSelector);
+	public static CSAalgorithm build(String name, Strategy strategy, HeuristicFunction heuristic) {
+		return build(name, strategy, heuristic, VariableSelectors.mostConstrainedFeatureVariableSelector);
 	}
 
-	public static CSAalgorithm build(Strategy strategy, HeuristicFunction heuristic,
+	public static CSAalgorithm build(String name, Strategy strategy,
+			VariableSelector<Problem<?, ?>> unassignedVariableSelector) {
+		return build(name, strategy, Heuristics.heuristicB, unassignedVariableSelector);
+	}
+
+	public static CSAalgorithm build(String name, Strategy strategy, HeuristicFunction heuristic,
 			VariableSelector<Problem<?, ?>> unassignedVariableSelector) {
 		switch (strategy) {
 		case BT:
-			return new CSABacktracking(heuristic, unassignedVariableSelector);
+			return new CSABacktracking(name, heuristic, unassignedVariableSelector);
 		case BestFS:
-			return new CSABestFirstSearch(heuristic, unassignedVariableSelector);
+			return new CSABestFirstSearch(name, heuristic, unassignedVariableSelector);
 		case BandB:
-			return new CSABranchAndBound(heuristic, unassignedVariableSelector);
+			return new CSABranchAndBound(name, heuristic, unassignedVariableSelector);
 		}
 		return null;
 	}
 
-	protected CSAalgorithm(Container<State> container) {
-		this(container, Heuristics.heuristicB);
+	protected CSAalgorithm(String name, Container<State> container) {
+		this(name, container, Heuristics.heuristicB);
 	}
 
-	protected CSAalgorithm(Container<State> container, HeuristicFunction heuristic) {
-		this(container, heuristic, VariableSelectors.topDownVariableSelector);
-	}
-	
-	public CSAalgorithm(Container<State> container, VariableSelector<Problem<?, ?>> unassignedVariableSelector) {
-		this(container, Heuristics.heuristicB, unassignedVariableSelector);
+	protected CSAalgorithm(String name, Container<State> container, HeuristicFunction heuristic) {
+		this(name, container, heuristic, VariableSelectors.topDownVariableSelector);
 	}
 
-	protected CSAalgorithm(Container<State> container, HeuristicFunction heuristic,
+	public CSAalgorithm(String name, Container<State> container,
 			VariableSelector<Problem<?, ?>> unassignedVariableSelector) {
-		this(container, heuristic, unassignedVariableSelector, ConstraintPropagators.clauseBasedConstraintPropagator);
+		this(name, container, Heuristics.heuristicB, unassignedVariableSelector);
 	}
 
-	protected CSAalgorithm(Container<State> container, HeuristicFunction heuristic,
+	protected CSAalgorithm(String name, Container<State> container, HeuristicFunction heuristic,
+			VariableSelector<Problem<?, ?>> unassignedVariableSelector) {
+		this(name, container, heuristic, unassignedVariableSelector,
+				ConstraintPropagators.clauseBasedConstraintPropagator);
+	}
+
+	protected CSAalgorithm(String name, Container<State> container, HeuristicFunction heuristic,
 			VariableSelector<Problem<?, ?>> unassignedVariableSelector, ConstraintPropagator cpropagator) {
 		this.open = container;
 		this.cpropagator = cpropagator;
 		this.heuristic = heuristic;
 		this.unassignedVariableSelector = unassignedVariableSelector;
+		this.name = name;
 	}
 
 	public void setOpenContainer(Container<State> open) {
@@ -90,10 +94,10 @@ public abstract class CSAalgorithm implements Algorithm<Problem<?, ?>> {
 	protected HeuristicFunction heuristic;
 	protected VariableSelector<Problem<?, ?>> unassignedVariableSelector;
 	protected ConstraintPropagator cpropagator;
+	protected String name;
 
 	@Override
 	public String getName() {
-		return "CSA" + "-" + open.getClass().getSimpleName() + "-" + cpropagator.getClass().getSimpleName() + "-"
-				+ heuristic.getClass().getSimpleName() + "-" + unassignedVariableSelector.getClass().getSimpleName();
+		return name;
 	}
 }

@@ -3,21 +3,21 @@ package edu.isistan.fmframework.optimization.optSPLConfig.model;
 import java.util.LinkedList;
 public class Feature {
 	
-	private int name;
+	private String name;
 	private boolean mandatory;
 	private double cost;
 	private double benefit; // 0=None, 1=Very Low, 2=Low, 3=Medium, 4=High, 5=Very High
-	private int father;
+	private String father;
 	private double costMin;
 	private int alt; // 0=None, 1=OR and 2=XOR
-	LinkedList<Integer> group = new LinkedList<Integer>();
+	LinkedList<String> group = new LinkedList<String>();
 	
 	public Feature(){
 	
 	}
 
-	public Feature(int name, boolean mandatory, double cost, double benefit,
-			int father, double costMin, int alt, LinkedList<Integer> group) {
+	public Feature(String name, boolean mandatory, double cost, double benefit,
+			String father, double costMin, int alt, LinkedList<String> group) {
 		super();
 		this.name = name;
 		this.mandatory = mandatory;
@@ -29,11 +29,11 @@ public class Feature {
 		this.group = group;
 	}
 	
-	public int getName() {
+	public String getName() {
 		return name;
 	}
 
-	public void setName(int name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
@@ -66,11 +66,11 @@ public class Feature {
 		this.benefit = benefit;
 	}
 
-	public int getFather() {
+	public String getFather() {
 		return father;
 	}
 
-	public void setFather(int father) {
+	public void setFather(String father) {
 		this.father = father;
 	}
 
@@ -90,11 +90,11 @@ public class Feature {
 		this.alt = alt;
 	}
 
-	public LinkedList<Integer> getGroup() {
+	public LinkedList<String> getGroup() {
 		return group;
 	}
 
-	public void setGroup(LinkedList<Integer> group) {
+	public void setGroup(LinkedList<String> group) {
 		this.group = group;
 	}
 	

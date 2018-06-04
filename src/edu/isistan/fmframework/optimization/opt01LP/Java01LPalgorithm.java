@@ -188,7 +188,7 @@ public class Java01LPalgorithm implements BasicAlgorithm {
 
 	@Override
 	public String getName() {
-		return "01LP-" + ilpsolver.toString();
+		return "01LP";
 	}
 
 	private static final double MULTIPLIER = 1000000.0;

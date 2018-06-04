@@ -27,18 +27,17 @@ public class MaxValuePerWeight implements VariableSelector<Problem<?, ?>> {
 	@Override
 	public void setup(Problem<?, ?> instance) {
 
-		BasicProblem binstance = (BasicProblem) instance;
-
-		if (binstance.model != null) {
-			variableorder = new int[binstance.model.getNumFeatures()];
-			if (binstance.globalConstraints != null && binstance.globalConstraints.length > 0) {
+		if (instance.model != null) {
+			variableorder = new int[instance.model.getNumFeatures()];
+			if (instanceHasLinearObjectiveAndLinearInequalityRestrictions(instance)) {
 				SortedMap<Double, Integer> orderM = new TreeMap<>();
-				for (int i = 0; i < binstance.model.getNumFeatures(); i++) {
-					double value = binstance.objectiveFunctions[0].attributes[i];
+				AdditionObjective objective = ((AdditionObjective) instance.objectiveFunctions[0]);
+				for (int i = 0; i < instance.model.getNumFeatures(); i++) {
+					double value = objective.attributes[i];
 					double relativeweight = 0.0;
-					for (int a = 0; a < binstance.globalConstraints.length; a++) {
-						relativeweight += binstance.globalConstraints[a].attributes[i]
-								/ binstance.globalConstraints[a].restrictionLimit;
+					for (int a = 0; a < instance.globalConstraints.length; a++) {
+						InequalityRestriction restriction = (InequalityRestriction) instance.globalConstraints[a];
+						relativeweight += restriction.attributes[i] / restriction.restrictionLimit;
 					}
 					value /= relativeweight;
 					orderM.put(value, i);
@@ -51,6 +50,20 @@ public class MaxValuePerWeight implements VariableSelector<Problem<?, ?>> {
 					variableorder[i] = i;
 			}
 		}
+	}
+
+	private boolean instanceHasLinearObjectiveAndLinearInequalityRestrictions(Problem<?, ?> instance) {
+		if(!(instance.objectiveFunctions[0] instanceof AdditionObjective)) {
+			return false;
+		}
+		if (instance.globalConstraints != null && instance.globalConstraints.length > 0) {
+			for(int i=0;i<instance.globalConstraints.length;i++) {
+				if(!(instance.globalConstraints[i] instanceof InequalityRestriction)) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 }

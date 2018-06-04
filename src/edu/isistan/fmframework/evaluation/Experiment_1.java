@@ -29,30 +29,41 @@ public class Experiment_1 {
 
 	static Algorithm<Problem> algs[] = new Algorithm[] {
 
-			CSAalgorithm.build(CSAalgorithm.Strategy.BT, new HeuristicA(), new MostConstrainedFeature()),
-			CSAalgorithm.build(CSAalgorithm.Strategy.BT, new HeuristicA(), new MaxValuePerWeight()),
-			CSAalgorithm.build(CSAalgorithm.Strategy.BT, new HeuristicB(), new MostConstrainedFeature()),
-			CSAalgorithm.build(CSAalgorithm.Strategy.BT, new HeuristicB(), new MaxValuePerWeight()),
-			CSAalgorithm.build(CSAalgorithm.Strategy.BT, new HeuristicA(), new MaxHeuristicValue(new HeuristicA())),
-			CSAalgorithm.build(CSAalgorithm.Strategy.BT, new HeuristicB(), new MaxHeuristicValue(new HeuristicB())),
+			CSAalgorithm.build("BT+HA+MCF", CSAalgorithm.Strategy.BT, new HeuristicA(), new MostConstrainedFeature()),
+			CSAalgorithm.build("BT+HA+MVW", CSAalgorithm.Strategy.BT, new HeuristicA(), new MaxValuePerWeight()),
+			CSAalgorithm.build("BT+HB+MCF", CSAalgorithm.Strategy.BT, new HeuristicB(), new MostConstrainedFeature()),
+			CSAalgorithm.build("BT+HB+MVW", CSAalgorithm.Strategy.BT, new HeuristicB(), new MaxValuePerWeight()),
+			CSAalgorithm.build("BT+HA+MHV", CSAalgorithm.Strategy.BT, new HeuristicA(),
+					new MaxHeuristicValue(new HeuristicA())),
+			CSAalgorithm.build("BT+HB+MHV", CSAalgorithm.Strategy.BT, new HeuristicB(),
+					new MaxHeuristicValue(new HeuristicB())),
 
-			CSAalgorithm.build(CSAalgorithm.Strategy.BandB, new HeuristicB(), new MaxHeuristicValue(new HeuristicB())),
-			CSAalgorithm.build(CSAalgorithm.Strategy.BestFS, new HeuristicB(), new MaxHeuristicValue(new HeuristicB())),
+			CSAalgorithm.build("BandB+HB+MHV", CSAalgorithm.Strategy.BandB, new HeuristicB(),
+					new MaxHeuristicValue(new HeuristicB())),
+			CSAalgorithm.build("BestFS+HB+MHV", CSAalgorithm.Strategy.BestFS, new HeuristicB(),
+					new MaxHeuristicValue(new HeuristicB())),
 
-			CSAalgorithm.build(CSAalgorithm.Strategy.BandB, new HeuristicB(), new MostConstrainedFeature()),
-			CSAalgorithm.build(CSAalgorithm.Strategy.BestFS, new HeuristicB(), new MostConstrainedFeature()),
+			CSAalgorithm.build("BandB+HB+MCF", CSAalgorithm.Strategy.BandB, new HeuristicB(),
+					new MostConstrainedFeature()),
+			CSAalgorithm.build("BestFS+HB+MCF", CSAalgorithm.Strategy.BestFS, new HeuristicB(),
+					new MostConstrainedFeature()),
 
-			CSAalgorithm.build(CSAalgorithm.Strategy.BandB, new HeuristicB(), new MaxValuePerWeight()),
-			CSAalgorithm.build(CSAalgorithm.Strategy.BestFS, new HeuristicB(), new MaxValuePerWeight()),
+			CSAalgorithm.build("BandB+HB+MVW", CSAalgorithm.Strategy.BandB, new HeuristicB(), new MaxValuePerWeight()),
+			CSAalgorithm.build("BestFS+HB+MVW", CSAalgorithm.Strategy.BestFS, new HeuristicB(),
+					new MaxValuePerWeight()),
 
-			CSAalgorithm.build(CSAalgorithm.Strategy.BandB, new HeuristicA(), new MostConstrainedFeature()),
-			CSAalgorithm.build(CSAalgorithm.Strategy.BestFS, new HeuristicA(), new MostConstrainedFeature()),
+			CSAalgorithm.build("BandB+HA+MCF", CSAalgorithm.Strategy.BandB, new HeuristicA(),
+					new MostConstrainedFeature()),
+			CSAalgorithm.build("BestFS+HA+MCF", CSAalgorithm.Strategy.BestFS, new HeuristicA(),
+					new MostConstrainedFeature()),
 
-			CSAalgorithm.build(CSAalgorithm.Strategy.BandB, new HeuristicA(), new MaxHeuristicValue(new HeuristicA())),
-			CSAalgorithm.build(CSAalgorithm.Strategy.BestFS, new HeuristicA(), new MaxHeuristicValue(new HeuristicA())),
+			CSAalgorithm.build("BandB+HA+MHV", CSAalgorithm.Strategy.BandB, new HeuristicA(),
+					new MaxHeuristicValue(new HeuristicA())),
+			CSAalgorithm.build("BestFS+HA+MHV", CSAalgorithm.Strategy.BestFS, new HeuristicA(),
+					new MaxHeuristicValue(new HeuristicA())),
 
-			CSAalgorithm.build(CSAalgorithm.Strategy.BandB, new HeuristicA(), new MaxValuePerWeight()),
-			CSAalgorithm.build(CSAalgorithm.Strategy.BestFS, new HeuristicA(), new MaxValuePerWeight())
+			CSAalgorithm.build("BandB+HA+MVW", CSAalgorithm.Strategy.BandB, new HeuristicA(), new MaxValuePerWeight()),
+			CSAalgorithm.build("BestFS+HA+MVW", CSAalgorithm.Strategy.BestFS, new HeuristicA(), new MaxValuePerWeight())
 
 	};
 
@@ -105,7 +116,7 @@ public class Experiment_1 {
 		};
 
 		run_experiment(200, samples_original_numFeatures_splotdist, runningalgorithms_original_numFeatures_splotdist,
-				"Result/Exp1-Part1", algs);
+				"Results/Exp1-Part1", algs);
 
 	};
 
@@ -132,7 +143,7 @@ public class Experiment_1 {
 		boolean[][] runningalgorithms = new boolean[][] { allAlgorithms, allAlgorithms, allAlgorithms, allAlgorithms,
 				allAlgorithms };
 
-		run_experiment(200, samples, runningalgorithms, "Result/Exp1-Part2", algs);
+		run_experiment(200, samples, runningalgorithms, "Results/Exp1-Part2", algs);
 	}
 
 	private static void run_experiment(int instances_per_sample, ProblemGenerator[] samples, boolean[][] runalgorithms,
@@ -151,8 +162,6 @@ public class Experiment_1 {
 		File directory = new File(folderPath);
 		if (!directory.exists()) {
 			directory.mkdir();
-			// If you require it to make the entire directory path including parents,
-			// use directory.mkdirs(); here instead.
 		}
 
 		String fileaverages = folderPath + "/Time-average.csv";
@@ -172,8 +181,8 @@ public class Experiment_1 {
 		String[] algoptimalityaverages = new String[algs.length + 1];
 
 		Configuration conf;
-		Algorithm<BasicProblem> algbest = new Java01LPalgorithm(OptType.MAX);
-		Algorithm<BasicProblem> algworst = new Java01LPalgorithm(OptType.MIN);
+		Algorithm<BasicProblem> algbest = new Java01LPalgorithm(OptType.MIN);
+		Algorithm<BasicProblem> algworst = new Java01LPalgorithm(OptType.MAX);
 
 		for (int s = 0; s < samples.length; s++) {
 			ProblemGenerator generator = samples[s];
@@ -195,7 +204,7 @@ public class Experiment_1 {
 					for (int a = 0; a < algs.length; a++) {
 						if (algorithms[a]) {
 							algs[a].preprocessInstance(instance);
-							// System.gc();
+							System.gc();
 
 							long start = System.nanoTime();
 							conf = algs[a].selectConfiguration(instance);

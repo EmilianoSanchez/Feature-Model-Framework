@@ -38,12 +38,12 @@ public class TestAlgorithmProperties {
 
 		Algorithm<BasicProblem> exactAlgorithms[] = new Algorithm[] { new Java01LPalgorithm(OptType.MIN),
 				new JavaBoolOptAlgorithm(OptType.MIN),
-				CSAalgorithm.build(CSAalgorithm.Strategy.BestFS, Heuristics.heuristicB,
+				CSAalgorithm.build("BestFS+HB+MHV", CSAalgorithm.Strategy.BestFS, Heuristics.heuristicB,
 						VariableSelectors.maxHeuristicValueVariableSelector),
-				CSAalgorithm.build(CSAalgorithm.Strategy.BandB, Heuristics.heuristicB,
+				CSAalgorithm.build("BandB+HB+MHV", CSAalgorithm.Strategy.BandB, Heuristics.heuristicB,
 						VariableSelectors.maxHeuristicValueVariableSelector) };
-		CSAalgorithm approxAlgorithmHB = CSAalgorithm.build(CSAalgorithm.Strategy.BT, new HeuristicB());
-		CSAalgorithm approxAlgorithmHA = CSAalgorithm.build(CSAalgorithm.Strategy.BT, new HeuristicA());
+		CSAalgorithm approxAlgorithmHB = CSAalgorithm.build("BT+HB", CSAalgorithm.Strategy.BT, new HeuristicB());
+		CSAalgorithm approxAlgorithmHA = CSAalgorithm.build("BT+HA", CSAalgorithm.Strategy.BT, new HeuristicA());
 
 		List<Pair<File, FeatureModel>> models = SPLOTModels.getModels(0, 882);
 		List<BasicProblem> instances = ProblemGenerator.generateValidBasicProblemInstances(models, 0);
@@ -95,13 +95,13 @@ public class TestAlgorithmProperties {
 	}
 
 	@Test
-//	@Ignore
+	// @Ignore
 	public void testExactAlgorithmsMultiLinearPolynomialObjective() throws FeatureModelException {
 
 		Algorithm<Problem> exactAlgorithms[] = new Algorithm[] { new Java_RLT_01LPalgorithm(OptType.MIN),
-				CSAalgorithm.build(CSAalgorithm.Strategy.BestFS, Heuristics.heuristicB,
+				CSAalgorithm.build("BestFS+HB+MHV", CSAalgorithm.Strategy.BestFS, Heuristics.heuristicB,
 						VariableSelectors.maxHeuristicValueVariableSelector),
-				CSAalgorithm.build(CSAalgorithm.Strategy.BandB, Heuristics.heuristicB,
+				CSAalgorithm.build("BandB+HB+MHV", CSAalgorithm.Strategy.BandB, Heuristics.heuristicB,
 						VariableSelectors.maxHeuristicValueVariableSelector) };
 
 		List<Pair<File, FeatureModel>> modelEntries = SPLOTModels.getModels(0, 882);
@@ -119,8 +119,8 @@ public class TestAlgorithmProperties {
 			System.out.println(count);
 			count++;
 
-//			System.out.println(instance.model.toString());
-//			System.out.println(instance.objectiveFunctions[0].toString());
+			// System.out.println(instance.model.toString());
+			// System.out.println(instance.objectiveFunctions[0].toString());
 
 			double values[] = new double[exactAlgorithms.length];
 			Configuration conf;
@@ -129,9 +129,9 @@ public class TestAlgorithmProperties {
 				conf = exactAlgorithms[i].selectConfiguration(instance);
 				values[i] = instance.evaluateObjectives(conf)[0];
 
-//				System.out.println(conf);
-//				System.out.println(instance.isSatisfied(conf));
-//				System.out.println(values[i]);
+				// System.out.println(conf);
+				// System.out.println(instance.isSatisfied(conf));
+				// System.out.println(values[i]);
 			}
 
 			for (int i = 1; i < exactAlgorithms.length; i++) {

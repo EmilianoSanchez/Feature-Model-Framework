@@ -15,18 +15,22 @@ import edu.isistan.fmframework.optimization.optSPLConfig.SPLConfigAlgorithm;
 import fm.FeatureModelException;
 
 public class Experiment_2 {
-	
+
 	public static void main(String[] args) throws FeatureModelException, IOException {
-		
+
 		final int rounds = 1;
 
 		Algorithm<BasicProblem> algorithms[] = new Algorithm[] {
-				CSAalgorithm.build(CSAalgorithm.Strategy.BT, new HeuristicA(), new MaxHeuristicValue(new HeuristicA())),
-				CSAalgorithm.build(CSAalgorithm.Strategy.BT, new HeuristicB(), new MaxHeuristicValue(new HeuristicB())),
-				CSAalgorithm.build(CSAalgorithm.Strategy.BT, new HeuristicA(), new MostConstrainedFeature()),
-				CSAalgorithm.build(CSAalgorithm.Strategy.BT, new HeuristicB(), new MostConstrainedFeature()),
-				CSAalgorithm.build(CSAalgorithm.Strategy.BT, new HeuristicA(), new MaxValuePerWeight()),
-				CSAalgorithm.build(CSAalgorithm.Strategy.BT, new HeuristicB(), new MaxValuePerWeight()),
+				CSAalgorithm.build("BT+HA+MHV", CSAalgorithm.Strategy.BT, new HeuristicA(),
+						new MaxHeuristicValue(new HeuristicA())),
+				CSAalgorithm.build("BT+HB+MHV", CSAalgorithm.Strategy.BT, new HeuristicB(),
+						new MaxHeuristicValue(new HeuristicB())),
+				CSAalgorithm.build("BT+HA+MCF", CSAalgorithm.Strategy.BT, new HeuristicA(),
+						new MostConstrainedFeature()),
+				CSAalgorithm.build("BT+HB+MCF", CSAalgorithm.Strategy.BT, new HeuristicB(),
+						new MostConstrainedFeature()),
+				CSAalgorithm.build("BT+HA+MVW", CSAalgorithm.Strategy.BT, new HeuristicA(), new MaxValuePerWeight()),
+				CSAalgorithm.build("BT+HB+MVW", CSAalgorithm.Strategy.BT, new HeuristicB(), new MaxValuePerWeight()),
 
 				new GAFESalgorithm(), new SPLConfigAlgorithm() };
 
@@ -51,7 +55,7 @@ public class Experiment_2 {
 				new double[] { 0.7 });
 		experiment.executeAprox();
 		experiment.saveResults("Results/Exp2/Exp2-Sample70");
-		
+
 	}
 
 }

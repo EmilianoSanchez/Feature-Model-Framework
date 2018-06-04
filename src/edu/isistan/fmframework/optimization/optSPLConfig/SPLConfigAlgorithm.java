@@ -1,17 +1,19 @@
 package edu.isistan.fmframework.optimization.optSPLConfig;
 
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 import edu.isistan.fmframework.core.Configuration;
+import edu.isistan.fmframework.core.FeatureModel;
 import edu.isistan.fmframework.core.FeatureState;
-import edu.isistan.fmframework.core.constraints.treeConstraints.AlternativeGroup;
-import edu.isistan.fmframework.core.constraints.treeConstraints.MandatoryFeature;
-import edu.isistan.fmframework.core.constraints.treeConstraints.OptionalFeature;
-import edu.isistan.fmframework.core.constraints.treeConstraints.OrGroup;
 import edu.isistan.fmframework.core.constraints.treeConstraints.TreeConstraint;
 import edu.isistan.fmframework.optimization.BasicAlgorithm;
 import edu.isistan.fmframework.optimization.BasicProblem;
+import edu.isistan.fmframework.optimization.objectiveFunctions.AdditionObjective;
+import edu.isistan.fmframework.optimization.objectiveFunctions.LinearWeightedObjective;
 import edu.isistan.fmframework.optimization.optSPLConfig.model.FM;
+import edu.isistan.fmframework.optimization.optSPLConfig.model.Feature;
 import edu.isistan.fmframework.optimization.optSPLConfig.solver.GreedyHeuristic;
 
 public class SPLConfigAlgorithm implements BasicAlgorithm {
@@ -21,19 +23,27 @@ public class SPLConfigAlgorithm implements BasicAlgorithm {
 	
 	@Override
 	public void preprocessInstance(BasicProblem instance) {
-		if (instance.objectiveFunctions.length > 1 || instance.objectiveFunctions.length == 0 || 
-				instance.globalConstraints.length > 1 || instance.objectiveFunctions.length == 0)
-			throw new IllegalArgumentException(
-					"SPLConfigAlgorithm only supports instances with a single additive objective function and a single linear inequality restriction");
-		
 		budgetText = String.valueOf(instance.globalConstraints[0].restrictionLimit);
-		fm = createSPLConfigFM(instance);
+		
+		double[] attributes;
+		
+		if(instance.objectiveFunctions[0] instanceof AdditionObjective){
+			attributes=((AdditionObjective)instance.objectiveFunctions[0]).attributes;
+		}else{
+//			if(instance.objectiveFunctions[0] instanceof LinearWeightedObjective){
+//				attributes=((AdditionObjective) ((LinearWeightedObjective) instance.objectiveFunctions[0]).getTerms().get(0).getKey()).attributes;
+//			}else{
+				throw new UnsupportedOperationException("Objective function "+instance.objectiveFunctions[0]+" is not supported");
+//			}
+		}
+		
+		fm = createSPLConfigFM(instance.model, attributes, instance.globalConstraints[0].attributes);
 	}
 	
 	@Override
 	public Configuration selectConfiguration(BasicProblem instance) {
-//		if (instance.globalConstraints.length != 1)
-//			throw new RuntimeException("instance must include one linear restriction");
+		if (instance.globalConstraints.length != 1)
+			throw new RuntimeException("instance must include one linear restriction");
 
 		GreedyHeuristic algorithm = new GreedyHeuristic(fm, budgetText);
 		
@@ -42,60 +52,57 @@ public class SPLConfigAlgorithm implements BasicAlgorithm {
 		}else{
 			Configuration conf=new Configuration(instance.model,FeatureState.DESELECTED);
 			
-//			Map<String,Integer> featuresByName=new HashMap<>();
-//			for(int i=0;i<instance.model.getNumFeatures();i++){
-//				featuresByName.put(instance.model.getFeature(i).toString(), i);
-//			}
-//			for (int feature : algorithm.getResult()){
-//				if(featuresByName.get(feature)!=null)
-//					conf.setFeatureState(featuresByName.get(feature), true);
-//			}
-			for (int feature : algorithm.getResult()){
-				conf.setFeatureState(feature, true);
+			Map<String,Integer> featuresByName=new HashMap<>();
+			for(int i=0;i<instance.model.getNumFeatures();i++){
+				featuresByName.put(instance.model.getFeature(i).getName(), i);
+			}
+			for (String feature : algorithm.getResult()){
+				if(featuresByName.get(feature)!=null)
+					conf.setFeatureState(featuresByName.get(feature), true);
 			}
 			return conf;
 		}
 	}
 
-	private FM createSPLConfigFM(BasicProblem instance) {
+	private FM createSPLConfigFM(FeatureModel model, double[] benefits, double[] costs) {
 
-		LinkedList<edu.isistan.fmframework.optimization.optSPLConfig.model.Feature> features = new LinkedList<edu.isistan.fmframework.optimization.optSPLConfig.model.Feature>();
-		for (int i = 0; i < instance.model.getNumFeatures(); i++) {
+		LinkedList<Feature> features = new LinkedList<Feature>();
+		for (int i = 0; i < model.getNumFeatures(); i++) {
 
-//			Object featureOrigin = instance.model.getFeature(i);
+			edu.isistan.fmframework.core.Feature featureOrigin = model.getFeature(i);
 
-			edu.isistan.fmframework.optimization.optSPLConfig.model.Feature feature = new edu.isistan.fmframework.optimization.optSPLConfig.model.Feature();
-			feature.setName(i);
+			Feature feature = new Feature();
+			feature.setName(featureOrigin.getName());
 
-			if (instance.model.getParentTree(i) != null) {
-				TreeConstraint parentTree = instance.model.getParentTree(i);
-				feature.setFather(parentTree.getParent());
+			if (model.getParentTree(i) != null) {
+				TreeConstraint parentTree = model.getParentTree(i);
+				feature.setFather(model.getFeature(parentTree.getParent()).getName());
 
-				
-				if (parentTree.getClass() == OrGroup.class) {
+				switch (parentTree.getType()) {
+				case OR_GROUP:
 					feature.setMandatory(false);
 					feature.setAlt(1);
-				}else{
-					if (parentTree.getClass() == AlternativeGroup.class) {
-						feature.setMandatory(false);
-						feature.setAlt(2);
-					}else{
-						if (parentTree.getClass() == MandatoryFeature.class) {
-							feature.setMandatory(true);
-							feature.setAlt(0);
-						}else{
-							if (parentTree.getClass() == OptionalFeature.class) {
-								feature.setMandatory(false);
-								feature.setAlt(0);
-							}
-						}
-						
-					}
+					break;
+				case ALTERNATIVE_GROUP:
+					feature.setMandatory(false);
+					feature.setAlt(2);
+					break;
+				case MANDATORY:
+					feature.setMandatory(true);
+					feature.setAlt(0);
+					break;
+				case OPTIONAL:
+					feature.setMandatory(false);
+					feature.setAlt(0);
+					break;
+
 				}
 			}
 
-			feature.setBenefit(instance.objectiveFunctions[0].attributes[i]);
-			feature.setCost(instance.globalConstraints[0].attributes[i]);
+			feature.setBenefit(benefits[i]);
+			feature.setCost(costs[i]);
+//			feature.setBenefit(featureOrigin.getAttribute(idBenefit));
+//			feature.setCost(featureOrigin.getAttribute(idCost));
 
 			features.add(feature);
 		}
@@ -106,8 +113,4 @@ public class SPLConfigAlgorithm implements BasicAlgorithm {
 		return fm;
 	}
 
-	@Override
-	public String getName() {
-		return "SPLConfig-Greedy";
-	}
 }

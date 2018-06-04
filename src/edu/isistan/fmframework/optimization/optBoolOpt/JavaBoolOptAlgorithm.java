@@ -125,7 +125,7 @@ public class JavaBoolOptAlgorithm implements BasicAlgorithm {
 
 	@Override
 	public String getName() {
-		return "BoolOpt-" + ilpsolver.toString();
+		return "BoolOpt";
 	}
 	
 	private static final double MULTIPLIER = 1000000.0;

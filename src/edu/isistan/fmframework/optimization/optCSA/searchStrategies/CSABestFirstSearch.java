@@ -7,24 +7,21 @@ import edu.isistan.fmframework.optimization.optCSA.variableSelectors.VariableSel
 
 public class CSABestFirstSearch extends CSABacktracking {
 
-	public CSABestFirstSearch() {
-		super(new PriorityQueue<State>());
+	public CSABestFirstSearch(String name) {
+		super(name, new PriorityQueue<State>());
 	}
 
-	public CSABestFirstSearch(HeuristicFunction heuristic) {
-		super(new PriorityQueue<State>(), heuristic);
-	}
-	
-	public CSABestFirstSearch(VariableSelector unassignedVariableSelector) {
-		super(new PriorityQueue<State>(), unassignedVariableSelector);
+	public CSABestFirstSearch(String name, HeuristicFunction heuristic) {
+		super(name, new PriorityQueue<State>(), heuristic);
 	}
 
-	public CSABestFirstSearch(HeuristicFunction heuristic,
+	public CSABestFirstSearch(String name, VariableSelector unassignedVariableSelector) {
+		super(name, new PriorityQueue<State>(), unassignedVariableSelector);
+	}
+
+	public CSABestFirstSearch(String name, HeuristicFunction heuristic,
 			VariableSelector<Problem<?, ?>> unassignedVariableSelector) {
-		super(new PriorityQueue<State>(), heuristic, unassignedVariableSelector);
+		super(name, new PriorityQueue<State>(), heuristic, unassignedVariableSelector);
 	}
-	
-	public String getName() {
-		return "BestFS"+super.getName();
-	};
+
 }
