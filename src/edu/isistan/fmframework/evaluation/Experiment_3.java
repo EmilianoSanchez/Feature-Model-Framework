@@ -7,7 +7,7 @@ import edu.isistan.fmframework.optimization.BasicProblem;
 import edu.isistan.fmframework.optimization.opt01LP.Java01LPalgorithm;
 import edu.isistan.fmframework.optimization.optBoolOpt.JavaBoolOptAlgorithm;
 import edu.isistan.fmframework.optimization.optCSA.CSAalgorithm;
-import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicB;
+import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicTC;
 import edu.isistan.fmframework.optimization.optCSA.variableSelectors.MaxHeuristicValue;
 import edu.isistan.fmframework.optimization.optCSA.variableSelectors.MaxValuePerWeight;
 import edu.isistan.fmframework.optimization.optCSA.variableSelectors.MostConstrainedFeature;
@@ -21,19 +21,19 @@ public class Experiment_3 {
 
 		Algorithm<BasicProblem> algorithms[] = new Algorithm[] {
 
-				CSAalgorithm.build("BandB+HB+MCF", CSAalgorithm.Strategy.BandB, new HeuristicB(),
+				CSAalgorithm.build("BandB+HTC+MCF", CSAalgorithm.Strategy.BandB, new HeuristicTC(),
 						new MostConstrainedFeature()),
-				CSAalgorithm.build("BandB+HB+MVW", CSAalgorithm.Strategy.BandB, new HeuristicB(),
+				CSAalgorithm.build("BandB+HTC+MVW", CSAalgorithm.Strategy.BandB, new HeuristicTC(),
 						new MaxValuePerWeight()),
-				CSAalgorithm.build("BandB+HB+MHV", CSAalgorithm.Strategy.BandB, new HeuristicB(),
-						new MaxHeuristicValue(new HeuristicB())),
+				CSAalgorithm.build("BandB+HTC+MHV", CSAalgorithm.Strategy.BandB, new HeuristicTC(),
+						new MaxHeuristicValue(new HeuristicTC())),
 
-				CSAalgorithm.build("BestFS+HB+MCF", CSAalgorithm.Strategy.BestFS, new HeuristicB(),
+				CSAalgorithm.build("BestFS+HTC+MCF", CSAalgorithm.Strategy.BestFS, new HeuristicTC(),
 						new MostConstrainedFeature()),
-				CSAalgorithm.build("BestFS+HB+MVW", CSAalgorithm.Strategy.BestFS, new HeuristicB(),
+				CSAalgorithm.build("BestFS+HTC+MVW", CSAalgorithm.Strategy.BestFS, new HeuristicTC(),
 						new MaxValuePerWeight()),
-				CSAalgorithm.build("BestFS+HB+MHV", CSAalgorithm.Strategy.BestFS, new HeuristicB(),
-						new MaxHeuristicValue(new HeuristicB())),
+				CSAalgorithm.build("BestFS+HTC+MHV", CSAalgorithm.Strategy.BestFS, new HeuristicTC(),
+						new MaxHeuristicValue(new HeuristicTC())),
 
 				new Java01LPalgorithm(), new JavaBoolOptAlgorithm() };
 

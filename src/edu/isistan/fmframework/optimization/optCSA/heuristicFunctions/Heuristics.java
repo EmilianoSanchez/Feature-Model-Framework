@@ -1,6 +1,6 @@
 package edu.isistan.fmframework.optimization.optCSA.heuristicFunctions;
 
 public class Heuristics {
-	public static HeuristicA heuristicA = new HeuristicA();
-	public static HeuristicB heuristicB = new HeuristicB();
+	public static HeuristicMO heuristicMO = new HeuristicMO();
+	public static HeuristicTC heuristicTC = new HeuristicTC();
 }

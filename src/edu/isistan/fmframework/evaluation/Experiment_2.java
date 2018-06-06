@@ -5,8 +5,8 @@ import java.io.IOException;
 import edu.isistan.fmframework.optimization.Algorithm;
 import edu.isistan.fmframework.optimization.BasicProblem;
 import edu.isistan.fmframework.optimization.optCSA.CSAalgorithm;
-import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicA;
-import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicB;
+import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicMO;
+import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicTC;
 import edu.isistan.fmframework.optimization.optCSA.variableSelectors.MaxHeuristicValue;
 import edu.isistan.fmframework.optimization.optCSA.variableSelectors.MaxValuePerWeight;
 import edu.isistan.fmframework.optimization.optCSA.variableSelectors.MostConstrainedFeature;
@@ -21,16 +21,16 @@ public class Experiment_2 {
 		final int rounds = 1;
 
 		Algorithm<BasicProblem> algorithms[] = new Algorithm[] {
-				CSAalgorithm.build("BT+HA+MHV", CSAalgorithm.Strategy.BT, new HeuristicA(),
-						new MaxHeuristicValue(new HeuristicA())),
-				CSAalgorithm.build("BT+HB+MHV", CSAalgorithm.Strategy.BT, new HeuristicB(),
-						new MaxHeuristicValue(new HeuristicB())),
-				CSAalgorithm.build("BT+HA+MCF", CSAalgorithm.Strategy.BT, new HeuristicA(),
+				CSAalgorithm.build("BT+HMO+MHV", CSAalgorithm.Strategy.BT, new HeuristicMO(),
+						new MaxHeuristicValue(new HeuristicMO())),
+				CSAalgorithm.build("BT+HTC+MHV", CSAalgorithm.Strategy.BT, new HeuristicTC(),
+						new MaxHeuristicValue(new HeuristicTC())),
+				CSAalgorithm.build("BT+HMO+MCF", CSAalgorithm.Strategy.BT, new HeuristicMO(),
 						new MostConstrainedFeature()),
-				CSAalgorithm.build("BT+HB+MCF", CSAalgorithm.Strategy.BT, new HeuristicB(),
+				CSAalgorithm.build("BT+HTC+MCF", CSAalgorithm.Strategy.BT, new HeuristicTC(),
 						new MostConstrainedFeature()),
-				CSAalgorithm.build("BT+HA+MVW", CSAalgorithm.Strategy.BT, new HeuristicA(), new MaxValuePerWeight()),
-				CSAalgorithm.build("BT+HB+MVW", CSAalgorithm.Strategy.BT, new HeuristicB(), new MaxValuePerWeight()),
+				CSAalgorithm.build("BT+HMO+MVW", CSAalgorithm.Strategy.BT, new HeuristicMO(), new MaxValuePerWeight()),
+				CSAalgorithm.build("BT+HTC+MVW", CSAalgorithm.Strategy.BT, new HeuristicTC(), new MaxValuePerWeight()),
 
 				new GAFESalgorithm(), new SPLConfigAlgorithm() };
 

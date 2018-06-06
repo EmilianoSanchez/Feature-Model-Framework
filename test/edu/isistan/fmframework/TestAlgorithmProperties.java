@@ -22,8 +22,8 @@ import edu.isistan.fmframework.optimization.opt01LP.Java01LPalgorithm;
 import edu.isistan.fmframework.optimization.optBoolOpt.JavaBoolOptAlgorithm;
 import edu.isistan.fmframework.optimization.optCSA.CSAalgorithm;
 import edu.isistan.fmframework.optimization.optCSA.constraintPropagator.ConstraintPropagators;
-import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicA;
-import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicB;
+import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicMO;
+import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicTC;
 import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.Heuristics;
 import edu.isistan.fmframework.optimization.optCSA.variableSelectors.VariableSelectors;
 import edu.isistan.fmframework.optimization.optRLT_01LP.Java_RLT_01LPalgorithm;
@@ -38,12 +38,12 @@ public class TestAlgorithmProperties {
 
 		Algorithm<BasicProblem> exactAlgorithms[] = new Algorithm[] { new Java01LPalgorithm(OptType.MIN),
 				new JavaBoolOptAlgorithm(OptType.MIN),
-				CSAalgorithm.build("BestFS+HB+MHV", CSAalgorithm.Strategy.BestFS, Heuristics.heuristicB,
+				CSAalgorithm.build("BestFS+HTC+MHV", CSAalgorithm.Strategy.BestFS, Heuristics.heuristicTC,
 						VariableSelectors.maxHeuristicValueVariableSelector),
-				CSAalgorithm.build("BandB+HB+MHV", CSAalgorithm.Strategy.BandB, Heuristics.heuristicB,
+				CSAalgorithm.build("BandB+HTC+MHV", CSAalgorithm.Strategy.BandB, Heuristics.heuristicTC,
 						VariableSelectors.maxHeuristicValueVariableSelector) };
-		CSAalgorithm approxAlgorithmHB = CSAalgorithm.build("BT+HB", CSAalgorithm.Strategy.BT, new HeuristicB());
-		CSAalgorithm approxAlgorithmHA = CSAalgorithm.build("BT+HA", CSAalgorithm.Strategy.BT, new HeuristicA());
+		CSAalgorithm approxAlgorithmHTC = CSAalgorithm.build("BT+HTC", CSAalgorithm.Strategy.BT, new HeuristicTC());
+		CSAalgorithm approxAlgorithmHMO = CSAalgorithm.build("BT+HMO", CSAalgorithm.Strategy.BT, new HeuristicMO());
 
 		List<Pair<File, FeatureModel>> models = SPLOTModels.getModels(0, 882);
 		List<BasicProblem> instances = ProblemGenerator.generateValidBasicProblemInstances(models, 0);
@@ -61,29 +61,29 @@ public class TestAlgorithmProperties {
 				conf = exactAlgorithms[i].selectConfiguration(instance);
 				values[i] = instance.evaluateObjectives(conf)[0];
 			}
-			approxAlgorithmHA.preprocessInstance(instance);
-			Configuration confA = approxAlgorithmHA.selectConfiguration(instance);
-			double aproxValueHA = instance.evaluateObjectives(confA)[0];
+			approxAlgorithmHMO.preprocessInstance(instance);
+			Configuration confA = approxAlgorithmHMO.selectConfiguration(instance);
+			double aproxValueHMO = instance.evaluateObjectives(confA)[0];
 
-			approxAlgorithmHB.preprocessInstance(instance);
-			Configuration confB = approxAlgorithmHB.selectConfiguration(instance);
-			double aproxValueHB = instance.evaluateObjectives(confB)[0];
+			approxAlgorithmHTC.preprocessInstance(instance);
+			Configuration confB = approxAlgorithmHTC.selectConfiguration(instance);
+			double aproxValueHTC = instance.evaluateObjectives(confB)[0];
 
 			for (int i = 1; i < exactAlgorithms.length; i++) {
 				Assert.assertTrue(values[0] == values[i]);
 			}
 
-			Assert.assertTrue(values[0] >= aproxValueHB);
-			Assert.assertTrue(aproxValueHB >= aproxValueHA);
+			Assert.assertTrue(values[0] >= aproxValueHTC);
+			Assert.assertTrue(aproxValueHTC >= aproxValueHMO);
 
-			if (aproxValueHB == aproxValueHA) {
+			if (aproxValueHTC == aproxValueHMO) {
 				counts[1] += 1;
 			} else {
-				if (aproxValueHB > aproxValueHA) {
+				if (aproxValueHTC > aproxValueHMO) {
 					counts[0] += 1;
 				} else {
 					counts[2] += 1;
-					System.out.println(aproxValueHB + " " + aproxValueHA);
+					System.out.println(aproxValueHTC + " " + aproxValueHMO);
 					System.out.println(confB);
 					System.out.println(confA);
 					System.out.println("Sum: " + DoubleStream.of(instance.objectiveFunctions[0].attributes).sum());
@@ -91,7 +91,7 @@ public class TestAlgorithmProperties {
 				}
 			}
 		}
-		System.out.println("HB>HA: " + counts[0] + " HB==HA: " + counts[1] + " HB<HA: " + counts[2]);
+		System.out.println("HTC>HMO: " + counts[0] + " HTC==HMO: " + counts[1] + " HTC<HMO: " + counts[2]);
 	}
 
 	@Test
@@ -99,9 +99,9 @@ public class TestAlgorithmProperties {
 	public void testExactAlgorithmsMultiLinearPolynomialObjective() throws FeatureModelException {
 
 		Algorithm<Problem> exactAlgorithms[] = new Algorithm[] { new Java_RLT_01LPalgorithm(OptType.MIN),
-				CSAalgorithm.build("BestFS+HB+MHV", CSAalgorithm.Strategy.BestFS, Heuristics.heuristicB,
+				CSAalgorithm.build("BestFS+HTC+MHV", CSAalgorithm.Strategy.BestFS, Heuristics.heuristicTC,
 						VariableSelectors.maxHeuristicValueVariableSelector),
-				CSAalgorithm.build("BandB+HB+MHV", CSAalgorithm.Strategy.BandB, Heuristics.heuristicB,
+				CSAalgorithm.build("BandB+HTC+MHV", CSAalgorithm.Strategy.BandB, Heuristics.heuristicTC,
 						VariableSelectors.maxHeuristicValueVariableSelector) };
 
 		List<Pair<File, FeatureModel>> modelEntries = SPLOTModels.getModels(0, 882);
@@ -143,8 +143,8 @@ public class TestAlgorithmProperties {
 	@Test
 	@Ignore
 	public void testAdmissibleHeuristic() throws FeatureModelException {
-		HeuristicB heuristicB = new HeuristicB();
-		HeuristicA heuristicA = new HeuristicA();
+		HeuristicTC heuristicTC = new HeuristicTC();
+		HeuristicMO heuristicMO = new HeuristicMO();
 
 		List<Pair<File, FeatureModel>> models = SPLOTModels.getModels(0, 882);
 		List<BasicProblem> instances = ProblemGenerator.generateValidBasicProblemInstances(models, 0);
@@ -156,10 +156,10 @@ public class TestAlgorithmProperties {
 
 			Configuration partialConfiguration = ConstraintPropagators.clauseBasedConstraintPropagator
 					.getPartialConfiguration(instance.model);
-			heuristicA.setup(instance);
-			double evaluationA = heuristicA.evaluate(partialConfiguration);
-			heuristicB.setup(instance);
-			double evaluationB = heuristicB.evaluate(partialConfiguration);
+			heuristicMO.setup(instance);
+			double evaluationA = heuristicMO.evaluate(partialConfiguration);
+			heuristicTC.setup(instance);
+			double evaluationB = heuristicTC.evaluate(partialConfiguration);
 
 			Assert.assertTrue(evaluationA <= evaluationB);
 
@@ -169,8 +169,8 @@ public class TestAlgorithmProperties {
 	@Test
 	@Ignore
 	public void testAdmissibleHeuristicMultiLinearPolynomialObjective() throws FeatureModelException {
-		HeuristicB heuristicB = new HeuristicB();
-		HeuristicA heuristicA = new HeuristicA();
+		HeuristicTC heuristicTC = new HeuristicTC();
+		HeuristicMO heuristicMO = new HeuristicMO();
 
 		List<Pair<File, FeatureModel>> models = SPLOTModels.getModels(0, 882);
 		List<Pair<File, FeatureModel>> modelEntries = SPLOTModels.getModels(0, 882);
@@ -190,10 +190,10 @@ public class TestAlgorithmProperties {
 
 			Configuration partialConfiguration = ConstraintPropagators.clauseBasedConstraintPropagator
 					.getPartialConfiguration(instance.model);
-			heuristicA.setup(instance);
-			double evaluationA = heuristicA.evaluate(partialConfiguration);
-			heuristicB.setup(instance);
-			double evaluationB = heuristicB.evaluate(partialConfiguration);
+			heuristicMO.setup(instance);
+			double evaluationA = heuristicMO.evaluate(partialConfiguration);
+			heuristicTC.setup(instance);
+			double evaluationB = heuristicTC.evaluate(partialConfiguration);
 
 			Assert.assertTrue(evaluationA <= evaluationB);
 		}

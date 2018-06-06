@@ -1,4 +1,4 @@
-"Model(Num features)","B&B+HB+MCF","B&B+HB+MVW","B&B+HB+MHV","BestFS+HB+MCF","BestFS+HB+MVW","BestFS+HB+MHV","BT+HA+MCF","BT+HA+MVW","BT+HA+MHV","BT+HB+MCF","BT+HB+MVW","BT+HB+MHV","JavaPseudoBooleanLPalgorithm-SAT4J"
+"Model(Num features)","B&B+HTC+MCF","B&B+HTC+MVW","B&B+HTC+MHV","BestFS+HTC+MCF","BestFS+HTC+MVW","BestFS+HTC+MHV","BT+HMO+MCF","BT+HMO+MVW","BT+HMO+MHV","BT+HTC+MCF","BT+HTC+MVW","BT+HTC+MHV","JavaPseudoBooleanLPalgorithm-SAT4J"
 "SAL(10)","1.0","1.0","1.0","1.0","1.0","1.0","1.0","1.0","1.0","1.0","1.0","1.0","1.0"
 "Mobile Game(10)","1.0","1.0","1.0","1.0","1.0","1.0","0.9702952366463701","1.0","1.0","1.0","1.0","1.0","1.0"
 "VODPlayer(10)","1.0","1.0","1.0","1.0","1.0","1.0","1.0","1.0","1.0","1.0","1.0","1.0","1.0"

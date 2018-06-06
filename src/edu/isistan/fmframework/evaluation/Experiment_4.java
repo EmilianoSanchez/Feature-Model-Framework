@@ -8,8 +8,8 @@ import edu.isistan.fmframework.core.Configuration;
 import edu.isistan.fmframework.optimization.Algorithm;
 import edu.isistan.fmframework.optimization.Problem;
 import edu.isistan.fmframework.optimization.optCSA.CSAalgorithm;
-import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicA;
-import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicB;
+import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicMO;
+import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicTC;
 import edu.isistan.fmframework.optimization.optCSA.variableSelectors.MaxHeuristicValue;
 import edu.isistan.fmframework.optimization.optCSA.variableSelectors.MaxValuePerWeight;
 import edu.isistan.fmframework.optimization.optCSA.variableSelectors.MostConstrainedFeature;
@@ -38,26 +38,26 @@ public class Experiment_4 {
 
 	static Algorithm<Problem<?, ?>> algorithms[] = new Algorithm[] {
 
-			CSAalgorithm.build("BT+HA+MHV", CSAalgorithm.Strategy.BT, new HeuristicA(),
-					new MaxHeuristicValue(new HeuristicA())),
-			CSAalgorithm.build("BT+HB+MHV", CSAalgorithm.Strategy.BT, new HeuristicB(),
-					new MaxHeuristicValue(new HeuristicB())),
-			CSAalgorithm.build("BT+HA+MCF", CSAalgorithm.Strategy.BT, new HeuristicA(), new MostConstrainedFeature()),
-			CSAalgorithm.build("BT+HB+MCF", CSAalgorithm.Strategy.BT, new HeuristicB(), new MostConstrainedFeature()),
-			CSAalgorithm.build("BT+HA+MVW", CSAalgorithm.Strategy.BT, new HeuristicA(), new MaxValuePerWeight()),
-			CSAalgorithm.build("BT+HB+MVW", CSAalgorithm.Strategy.BT, new HeuristicB(), new MaxValuePerWeight()),
+			CSAalgorithm.build("BT+HMO+MHV", CSAalgorithm.Strategy.BT, new HeuristicMO(),
+					new MaxHeuristicValue(new HeuristicMO())),
+			CSAalgorithm.build("BT+HTC+MHV", CSAalgorithm.Strategy.BT, new HeuristicTC(),
+					new MaxHeuristicValue(new HeuristicTC())),
+			CSAalgorithm.build("BT+HMO+MCF", CSAalgorithm.Strategy.BT, new HeuristicMO(), new MostConstrainedFeature()),
+			CSAalgorithm.build("BT+HTC+MCF", CSAalgorithm.Strategy.BT, new HeuristicTC(), new MostConstrainedFeature()),
+			CSAalgorithm.build("BT+HMO+MVW", CSAalgorithm.Strategy.BT, new HeuristicMO(), new MaxValuePerWeight()),
+			CSAalgorithm.build("BT+HTC+MVW", CSAalgorithm.Strategy.BT, new HeuristicTC(), new MaxValuePerWeight()),
 
-			CSAalgorithm.build("BandB+HB+MCF", CSAalgorithm.Strategy.BandB, new HeuristicB(),
+			CSAalgorithm.build("BandB+HTC+MCF", CSAalgorithm.Strategy.BandB, new HeuristicTC(),
 					new MostConstrainedFeature()),
-			CSAalgorithm.build("BandB+HB+MVW", CSAalgorithm.Strategy.BandB, new HeuristicB(), new MaxValuePerWeight()),
-			CSAalgorithm.build("BandB+HB+MHV", CSAalgorithm.Strategy.BandB, new HeuristicB(),
-					new MaxHeuristicValue(new HeuristicB())),
-			CSAalgorithm.build("BestFS+HB+MCF", CSAalgorithm.Strategy.BestFS, new HeuristicB(),
+			CSAalgorithm.build("BandB+HTC+MVW", CSAalgorithm.Strategy.BandB, new HeuristicTC(), new MaxValuePerWeight()),
+			CSAalgorithm.build("BandB+HTC+MHV", CSAalgorithm.Strategy.BandB, new HeuristicTC(),
+					new MaxHeuristicValue(new HeuristicTC())),
+			CSAalgorithm.build("BestFS+HTC+MCF", CSAalgorithm.Strategy.BestFS, new HeuristicTC(),
 					new MostConstrainedFeature()),
-			CSAalgorithm.build("BestFS+HB+MVW", CSAalgorithm.Strategy.BestFS, new HeuristicB(),
+			CSAalgorithm.build("BestFS+HTC+MVW", CSAalgorithm.Strategy.BestFS, new HeuristicTC(),
 					new MaxValuePerWeight()),
-			CSAalgorithm.build("BestFS+HB+MHV", CSAalgorithm.Strategy.BestFS, new HeuristicB(),
-					new MaxHeuristicValue(new HeuristicB())),
+			CSAalgorithm.build("BestFS+HTC+MHV", CSAalgorithm.Strategy.BestFS, new HeuristicTC(),
+					new MaxHeuristicValue(new HeuristicTC())),
 
 			new Java_RLT_01LPalgorithm() };
 

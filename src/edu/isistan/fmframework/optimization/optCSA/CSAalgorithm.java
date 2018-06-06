@@ -21,7 +21,7 @@ public abstract class CSAalgorithm implements Algorithm<Problem<?, ?>> {
 	}
 
 	public static CSAalgorithm build(String name, Strategy strategy) {
-		return build(name, strategy, Heuristics.heuristicB, VariableSelectors.mostConstrainedFeatureVariableSelector);
+		return build(name, strategy, Heuristics.heuristicTC, VariableSelectors.mostConstrainedFeatureVariableSelector);
 	}
 
 	public static CSAalgorithm build(String name, Strategy strategy, HeuristicFunction heuristic) {
@@ -30,7 +30,7 @@ public abstract class CSAalgorithm implements Algorithm<Problem<?, ?>> {
 
 	public static CSAalgorithm build(String name, Strategy strategy,
 			VariableSelector<Problem<?, ?>> unassignedVariableSelector) {
-		return build(name, strategy, Heuristics.heuristicB, unassignedVariableSelector);
+		return build(name, strategy, Heuristics.heuristicTC, unassignedVariableSelector);
 	}
 
 	public static CSAalgorithm build(String name, Strategy strategy, HeuristicFunction heuristic,
@@ -47,7 +47,7 @@ public abstract class CSAalgorithm implements Algorithm<Problem<?, ?>> {
 	}
 
 	protected CSAalgorithm(String name, Container<State> container) {
-		this(name, container, Heuristics.heuristicB);
+		this(name, container, Heuristics.heuristicTC);
 	}
 
 	protected CSAalgorithm(String name, Container<State> container, HeuristicFunction heuristic) {
@@ -56,7 +56,7 @@ public abstract class CSAalgorithm implements Algorithm<Problem<?, ?>> {
 
 	public CSAalgorithm(String name, Container<State> container,
 			VariableSelector<Problem<?, ?>> unassignedVariableSelector) {
-		this(name, container, Heuristics.heuristicB, unassignedVariableSelector);
+		this(name, container, Heuristics.heuristicTC, unassignedVariableSelector);
 	}
 
 	protected CSAalgorithm(String name, Container<State> container, HeuristicFunction heuristic,

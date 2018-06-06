@@ -1,9 +1,0 @@
-com.emiliano.fmframework.building
-com.emiliano.fmframework.core
-com.emiliano.fmframework.core.constraints
-com.emiliano.fmframework.core.constraints.basicCrossTreeConstraints
-com.emiliano.fmframework.core.constraints.generalCrossTreeConstraints
-com.emiliano.fmframework.core.constraints.treeConstraints
-com.emiliano.fmframework.reasoning
-com.emiliano.fmframework.reasoning.objectiveFunctions
-com.emiliano.fmframework.test

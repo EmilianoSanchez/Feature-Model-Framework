@@ -10,7 +10,7 @@ import edu.isistan.fmframework.core.FeatureState;
 import edu.isistan.fmframework.optimization.Problem;
 import edu.isistan.fmframework.optimization.optCSA.constraintPropagator.ClauseBasedConstraintPropagator;
 import edu.isistan.fmframework.optimization.optCSA.constraintPropagator.ConstraintPropagators;
-import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicB;
+import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicTC;
 import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicFunction;
 
 public class MaxHeuristicValue implements VariableSelector<Problem<?, ?>> {
@@ -19,7 +19,7 @@ public class MaxHeuristicValue implements VariableSelector<Problem<?, ?>> {
 	private ClauseBasedConstraintPropagator cpropagator;
 
 	public MaxHeuristicValue(){
-		this(new HeuristicB());
+		this(new HeuristicTC());
 	}
 	public MaxHeuristicValue(HeuristicFunction<Problem<?, ?>> heuristic){
 		this.heuristic = heuristic;

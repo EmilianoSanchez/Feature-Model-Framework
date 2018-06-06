@@ -10,8 +10,8 @@ import edu.isistan.fmframework.optimization.BasicProblem;
 import edu.isistan.fmframework.optimization.Problem;
 import edu.isistan.fmframework.optimization.opt01LP.Java01LPalgorithm;
 import edu.isistan.fmframework.optimization.optCSA.CSAalgorithm;
-import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicA;
-import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicB;
+import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicMO;
+import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicTC;
 import edu.isistan.fmframework.optimization.optCSA.variableSelectors.MaxHeuristicValue;
 import edu.isistan.fmframework.optimization.optCSA.variableSelectors.MaxValuePerWeight;
 import edu.isistan.fmframework.optimization.optCSA.variableSelectors.MostConstrainedFeature;
@@ -29,51 +29,51 @@ public class Experiment_1 {
 
 	static Algorithm<Problem> algs[] = new Algorithm[] {
 
-			CSAalgorithm.build("BT+HA+MCF", CSAalgorithm.Strategy.BT, new HeuristicA(), new MostConstrainedFeature()),
-			CSAalgorithm.build("BT+HA+MVW", CSAalgorithm.Strategy.BT, new HeuristicA(), new MaxValuePerWeight()),
-			CSAalgorithm.build("BT+HB+MCF", CSAalgorithm.Strategy.BT, new HeuristicB(), new MostConstrainedFeature()),
-			CSAalgorithm.build("BT+HB+MVW", CSAalgorithm.Strategy.BT, new HeuristicB(), new MaxValuePerWeight()),
-			CSAalgorithm.build("BT+HA+MHV", CSAalgorithm.Strategy.BT, new HeuristicA(),
-					new MaxHeuristicValue(new HeuristicA())),
-			CSAalgorithm.build("BT+HB+MHV", CSAalgorithm.Strategy.BT, new HeuristicB(),
-					new MaxHeuristicValue(new HeuristicB())),
+			CSAalgorithm.build("BT+HMO+MCF", CSAalgorithm.Strategy.BT, new HeuristicMO(), new MostConstrainedFeature()),
+			CSAalgorithm.build("BT+HMO+MVW", CSAalgorithm.Strategy.BT, new HeuristicMO(), new MaxValuePerWeight()),
+			CSAalgorithm.build("BT+HTC+MCF", CSAalgorithm.Strategy.BT, new HeuristicTC(), new MostConstrainedFeature()),
+			CSAalgorithm.build("BT+HTC+MVW", CSAalgorithm.Strategy.BT, new HeuristicTC(), new MaxValuePerWeight()),
+			CSAalgorithm.build("BT+HMO+MHV", CSAalgorithm.Strategy.BT, new HeuristicMO(),
+					new MaxHeuristicValue(new HeuristicMO())),
+			CSAalgorithm.build("BT+HTC+MHV", CSAalgorithm.Strategy.BT, new HeuristicTC(),
+					new MaxHeuristicValue(new HeuristicTC())),
 
-			CSAalgorithm.build("BandB+HB+MHV", CSAalgorithm.Strategy.BandB, new HeuristicB(),
-					new MaxHeuristicValue(new HeuristicB())),
-			CSAalgorithm.build("BestFS+HB+MHV", CSAalgorithm.Strategy.BestFS, new HeuristicB(),
-					new MaxHeuristicValue(new HeuristicB())),
+			CSAalgorithm.build("BandB+HTC+MHV", CSAalgorithm.Strategy.BandB, new HeuristicTC(),
+					new MaxHeuristicValue(new HeuristicTC())),
+			CSAalgorithm.build("BestFS+HTC+MHV", CSAalgorithm.Strategy.BestFS, new HeuristicTC(),
+					new MaxHeuristicValue(new HeuristicTC())),
 
-			CSAalgorithm.build("BandB+HB+MCF", CSAalgorithm.Strategy.BandB, new HeuristicB(),
+			CSAalgorithm.build("BandB+HTC+MCF", CSAalgorithm.Strategy.BandB, new HeuristicTC(),
 					new MostConstrainedFeature()),
-			CSAalgorithm.build("BestFS+HB+MCF", CSAalgorithm.Strategy.BestFS, new HeuristicB(),
+			CSAalgorithm.build("BestFS+HTC+MCF", CSAalgorithm.Strategy.BestFS, new HeuristicTC(),
 					new MostConstrainedFeature()),
 
-			CSAalgorithm.build("BandB+HB+MVW", CSAalgorithm.Strategy.BandB, new HeuristicB(), new MaxValuePerWeight()),
-			CSAalgorithm.build("BestFS+HB+MVW", CSAalgorithm.Strategy.BestFS, new HeuristicB(),
+			CSAalgorithm.build("BandB+HTC+MVW", CSAalgorithm.Strategy.BandB, new HeuristicTC(), new MaxValuePerWeight()),
+			CSAalgorithm.build("BestFS+HTC+MVW", CSAalgorithm.Strategy.BestFS, new HeuristicTC(),
 					new MaxValuePerWeight()),
 
-			CSAalgorithm.build("BandB+HA+MCF", CSAalgorithm.Strategy.BandB, new HeuristicA(),
+			CSAalgorithm.build("BandB+HMO+MCF", CSAalgorithm.Strategy.BandB, new HeuristicMO(),
 					new MostConstrainedFeature()),
-			CSAalgorithm.build("BestFS+HA+MCF", CSAalgorithm.Strategy.BestFS, new HeuristicA(),
+			CSAalgorithm.build("BestFS+HMO+MCF", CSAalgorithm.Strategy.BestFS, new HeuristicMO(),
 					new MostConstrainedFeature()),
 
-			CSAalgorithm.build("BandB+HA+MHV", CSAalgorithm.Strategy.BandB, new HeuristicA(),
-					new MaxHeuristicValue(new HeuristicA())),
-			CSAalgorithm.build("BestFS+HA+MHV", CSAalgorithm.Strategy.BestFS, new HeuristicA(),
-					new MaxHeuristicValue(new HeuristicA())),
+			CSAalgorithm.build("BandB+HMO+MHV", CSAalgorithm.Strategy.BandB, new HeuristicMO(),
+					new MaxHeuristicValue(new HeuristicMO())),
+			CSAalgorithm.build("BestFS+HMO+MHV", CSAalgorithm.Strategy.BestFS, new HeuristicMO(),
+					new MaxHeuristicValue(new HeuristicMO())),
 
-			CSAalgorithm.build("BandB+HA+MVW", CSAalgorithm.Strategy.BandB, new HeuristicA(), new MaxValuePerWeight()),
-			CSAalgorithm.build("BestFS+HA+MVW", CSAalgorithm.Strategy.BestFS, new HeuristicA(), new MaxValuePerWeight())
+			CSAalgorithm.build("BandB+HMO+MVW", CSAalgorithm.Strategy.BandB, new HeuristicMO(), new MaxValuePerWeight()),
+			CSAalgorithm.build("BestFS+HMO+MVW", CSAalgorithm.Strategy.BestFS, new HeuristicMO(), new MaxValuePerWeight())
 
 	};
 
 	static boolean[] allAlgorithms = new boolean[] { true, true, true, true, true, true, true, true, true, true, true,
 			true, true, true, true, true, true, true };
-	static boolean[] allAlgorithmsLessExactVariantsWithHAwithMHVandMVW = new boolean[] { true, true, true, true, true,
+	static boolean[] allAlgorithmsLessExactVariantsWithHMOwithMHVandMVW = new boolean[] { true, true, true, true, true,
 			true, true, true, true, true, true, true, true, true, false, false, false, false };
-	static boolean[] allAlgorithmsLessExactVariantsWithHA = new boolean[] { true, true, true, true, true, true, true,
+	static boolean[] allAlgorithmsLessExactVariantsWithHMO = new boolean[] { true, true, true, true, true, true, true,
 			true, true, true, true, true, false, false, false, false, false, false };
-	static boolean[] allAlgorithmsLessExactVariantsWithHAandHBwithMCFandMVW = new boolean[] { true, true, true, true,
+	static boolean[] allAlgorithmsLessExactVariantsWithHMOandHTCwithMCFandMVW = new boolean[] { true, true, true, true,
 			true, true, true, true, false, false, false, false, false, false, false, false, false, false };
 	static boolean[] allAlgorithmsLessExactVariants = new boolean[] { true, true, true, true, true, true, false, false,
 			false, false, false, false, false, false, false, false, false, false };
@@ -91,21 +91,21 @@ public class Experiment_1 {
 
 		boolean[][] runningalgorithms_original_numFeatures_splotdist = new boolean[][] { allAlgorithms, allAlgorithms,
 				allAlgorithms, allAlgorithms, allAlgorithms, // 50
-				allAlgorithmsLessExactVariantsWithHAwithMHVandMVW, allAlgorithmsLessExactVariantsWithHAwithMHVandMVW,
-				allAlgorithmsLessExactVariantsWithHAwithMHVandMVW, allAlgorithmsLessExactVariantsWithHAwithMHVandMVW,
-				allAlgorithmsLessExactVariantsWithHAwithMHVandMVW, // 100
-				allAlgorithmsLessExactVariantsWithHA, allAlgorithmsLessExactVariantsWithHA,
-				allAlgorithmsLessExactVariantsWithHA, allAlgorithmsLessExactVariantsWithHA, // 140
-				allAlgorithmsLessExactVariantsWithHAandHBwithMCFandMVW,
-				allAlgorithmsLessExactVariantsWithHAandHBwithMCFandMVW,
-				allAlgorithmsLessExactVariantsWithHAandHBwithMCFandMVW,
-				allAlgorithmsLessExactVariantsWithHAandHBwithMCFandMVW,
-				allAlgorithmsLessExactVariantsWithHAandHBwithMCFandMVW,
-				allAlgorithmsLessExactVariantsWithHAandHBwithMCFandMVW,
-				allAlgorithmsLessExactVariantsWithHAandHBwithMCFandMVW,
-				allAlgorithmsLessExactVariantsWithHAandHBwithMCFandMVW,
-				allAlgorithmsLessExactVariantsWithHAandHBwithMCFandMVW,
-				allAlgorithmsLessExactVariantsWithHAandHBwithMCFandMVW, // 240
+				allAlgorithmsLessExactVariantsWithHMOwithMHVandMVW, allAlgorithmsLessExactVariantsWithHMOwithMHVandMVW,
+				allAlgorithmsLessExactVariantsWithHMOwithMHVandMVW, allAlgorithmsLessExactVariantsWithHMOwithMHVandMVW,
+				allAlgorithmsLessExactVariantsWithHMOwithMHVandMVW, // 100
+				allAlgorithmsLessExactVariantsWithHMO, allAlgorithmsLessExactVariantsWithHMO,
+				allAlgorithmsLessExactVariantsWithHMO, allAlgorithmsLessExactVariantsWithHMO, // 140
+				allAlgorithmsLessExactVariantsWithHMOandHTCwithMCFandMVW,
+				allAlgorithmsLessExactVariantsWithHMOandHTCwithMCFandMVW,
+				allAlgorithmsLessExactVariantsWithHMOandHTCwithMCFandMVW,
+				allAlgorithmsLessExactVariantsWithHMOandHTCwithMCFandMVW,
+				allAlgorithmsLessExactVariantsWithHMOandHTCwithMCFandMVW,
+				allAlgorithmsLessExactVariantsWithHMOandHTCwithMCFandMVW,
+				allAlgorithmsLessExactVariantsWithHMOandHTCwithMCFandMVW,
+				allAlgorithmsLessExactVariantsWithHMOandHTCwithMCFandMVW,
+				allAlgorithmsLessExactVariantsWithHMOandHTCwithMCFandMVW,
+				allAlgorithmsLessExactVariantsWithHMOandHTCwithMCFandMVW, // 240
 				allAlgorithmsLessExactVariants, allAlgorithmsLessExactVariants, allAlgorithmsLessExactVariants,
 				allAlgorithmsLessExactVariants, allAlgorithmsLessExactVariants, allAlgorithmsLessExactVariants,
 				allAlgorithmsLessExactVariants, allAlgorithmsLessExactVariants, allAlgorithmsLessExactVariants,
