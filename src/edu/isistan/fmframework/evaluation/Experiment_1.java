@@ -48,7 +48,8 @@ public class Experiment_1 {
 			CSAalgorithm.build("BestFS+HTC+MCF", CSAalgorithm.Strategy.BestFS, new HeuristicTC(),
 					new MostConstrainedFeature()),
 
-			CSAalgorithm.build("BandB+HTC+MVW", CSAalgorithm.Strategy.BandB, new HeuristicTC(), new MaxValuePerWeight()),
+			CSAalgorithm.build("BandB+HTC+MVW", CSAalgorithm.Strategy.BandB, new HeuristicTC(),
+					new MaxValuePerWeight()),
 			CSAalgorithm.build("BestFS+HTC+MVW", CSAalgorithm.Strategy.BestFS, new HeuristicTC(),
 					new MaxValuePerWeight()),
 
@@ -62,8 +63,10 @@ public class Experiment_1 {
 			CSAalgorithm.build("BestFS+HMO+MHV", CSAalgorithm.Strategy.BestFS, new HeuristicMO(),
 					new MaxHeuristicValue(new HeuristicMO())),
 
-			CSAalgorithm.build("BandB+HMO+MVW", CSAalgorithm.Strategy.BandB, new HeuristicMO(), new MaxValuePerWeight()),
-			CSAalgorithm.build("BestFS+HMO+MVW", CSAalgorithm.Strategy.BestFS, new HeuristicMO(), new MaxValuePerWeight())
+			CSAalgorithm.build("BandB+HMO+MVW", CSAalgorithm.Strategy.BandB, new HeuristicMO(),
+					new MaxValuePerWeight()),
+			CSAalgorithm.build("BestFS+HMO+MVW", CSAalgorithm.Strategy.BestFS, new HeuristicMO(),
+					new MaxValuePerWeight())
 
 	};
 
@@ -154,7 +157,7 @@ public class Experiment_1 {
 
 		String[] algnames = null;
 		algnames = new String[algs.length + 1];
-		algnames[0] = "Num features";
+		algnames[0] = "Sample name";
 		for (int a = 0; a < algs.length; a++) {
 			algnames[a + 1] = algs[a].getName();
 		}

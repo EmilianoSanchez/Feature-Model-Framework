@@ -62,8 +62,9 @@ public class MaxValuePerWeight implements VariableSelector<Problem<?, ?>> {
 					return false;
 				}
 			}
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 }

@@ -90,4 +90,9 @@ public class CSABranchAndBound extends CSAalgorithm {
 		super(name, container, heuristic, unassignedVariableSelector, constraintPropagator);
 	}
 
+	public CSABranchAndBound(String name, HeuristicFunction heuristic,
+			VariableSelector<Problem<?, ?>> unassignedVariableSelector, ConstraintPropagator cpropagator) {
+		super(name, new PriorityStack<State>(), heuristic, unassignedVariableSelector, cpropagator);
+	}
+
 }

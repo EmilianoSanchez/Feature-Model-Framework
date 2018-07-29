@@ -87,4 +87,9 @@ public class CSABacktracking extends CSAalgorithm {
 		super(name, container, heuristic, unassignedVariableSelector, constraintPropagator);
 	}
 
+	public CSABacktracking(String name, HeuristicFunction heuristic,
+			VariableSelector<Problem<?, ?>> unassignedVariableSelector, ConstraintPropagator cpropagator) {
+		super(name, new PriorityStack<State>(), heuristic, unassignedVariableSelector, cpropagator);
+	}
+
 }

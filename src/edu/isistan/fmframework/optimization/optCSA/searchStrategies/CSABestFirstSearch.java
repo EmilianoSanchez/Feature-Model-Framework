@@ -1,6 +1,7 @@
 package edu.isistan.fmframework.optimization.optCSA.searchStrategies;
 
 import edu.isistan.fmframework.optimization.Problem;
+import edu.isistan.fmframework.optimization.optCSA.constraintPropagator.ConstraintPropagator;
 import edu.isistan.fmframework.optimization.optCSA.containers.PriorityQueue;
 import edu.isistan.fmframework.optimization.optCSA.heuristicFunctions.HeuristicFunction;
 import edu.isistan.fmframework.optimization.optCSA.variableSelectors.VariableSelector;
@@ -22,6 +23,11 @@ public class CSABestFirstSearch extends CSABacktracking {
 	public CSABestFirstSearch(String name, HeuristicFunction heuristic,
 			VariableSelector<Problem<?, ?>> unassignedVariableSelector) {
 		super(name, new PriorityQueue<State>(), heuristic, unassignedVariableSelector);
+	}
+
+	public CSABestFirstSearch(String name, HeuristicFunction heuristic,
+			VariableSelector<Problem<?, ?>> unassignedVariableSelector, ConstraintPropagator cpropagator) {
+		super(name, new PriorityQueue<State>(), heuristic, unassignedVariableSelector, cpropagator);
 	}
 
 }

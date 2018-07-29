@@ -11,8 +11,8 @@ import edu.isistan.fmframework.optimization.optCSA.searchStrategies.CSABacktrack
 import edu.isistan.fmframework.optimization.optCSA.searchStrategies.CSABestFirstSearch;
 import edu.isistan.fmframework.optimization.optCSA.searchStrategies.CSABranchAndBound;
 import edu.isistan.fmframework.optimization.optCSA.searchStrategies.State;
-import edu.isistan.fmframework.optimization.optCSA.variableSelectors.VariableSelectors;
 import edu.isistan.fmframework.optimization.optCSA.variableSelectors.VariableSelector;
+import edu.isistan.fmframework.optimization.optCSA.variableSelectors.VariableSelectors;
 
 public abstract class CSAalgorithm implements Algorithm<Problem<?, ?>> {
 
@@ -35,15 +35,34 @@ public abstract class CSAalgorithm implements Algorithm<Problem<?, ?>> {
 
 	public static CSAalgorithm build(String name, Strategy strategy, HeuristicFunction heuristic,
 			VariableSelector<Problem<?, ?>> unassignedVariableSelector) {
+		CSAalgorithm result = null;
 		switch (strategy) {
 		case BT:
-			return new CSABacktracking(name, heuristic, unassignedVariableSelector);
+			result = new CSABacktracking(name, heuristic, unassignedVariableSelector);
+			break;
 		case BestFS:
-			return new CSABestFirstSearch(name, heuristic, unassignedVariableSelector);
+			result = new CSABestFirstSearch(name, heuristic, unassignedVariableSelector);
+			break;
 		case BandB:
-			return new CSABranchAndBound(name, heuristic, unassignedVariableSelector);
+			result = new CSABranchAndBound(name, heuristic, unassignedVariableSelector);
 		}
-		return null;
+		return result;
+	}
+	
+	public static CSAalgorithm build(String name, Strategy strategy, HeuristicFunction heuristic,
+			VariableSelector<Problem<?, ?>> unassignedVariableSelector, ConstraintPropagator cpropagator) {
+		CSAalgorithm result = null;
+		switch (strategy) {
+		case BT:
+			result = new CSABacktracking(name, heuristic, unassignedVariableSelector,cpropagator);
+			break;
+		case BestFS:
+			result = new CSABestFirstSearch(name, heuristic, unassignedVariableSelector,cpropagator);
+			break;
+		case BandB:
+			result = new CSABranchAndBound(name, heuristic, unassignedVariableSelector,cpropagator);
+		}
+		return result;
 	}
 
 	protected CSAalgorithm(String name, Container<State> container) {
@@ -76,6 +95,10 @@ public abstract class CSAalgorithm implements Algorithm<Problem<?, ?>> {
 
 	public void setOpenContainer(Container<State> open) {
 		this.open = open;
+	}
+
+	public Container<State> getOpenContainer() {
+		return this.open;
 	}
 
 	public void setHeuristic(HeuristicFunction heuristic) {
