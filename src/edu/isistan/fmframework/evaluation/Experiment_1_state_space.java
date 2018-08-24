@@ -29,7 +29,7 @@ public class Experiment_1_state_space {
 	public static void main(String[] args) throws IOException, FeatureModelException {
 		loadAlgorithms();
 
-		// experiment1_part1_state_space();
+		experiment1_part1_state_space();
 		experiment1_part2_state_space();
 	}
 
@@ -163,7 +163,7 @@ public class Experiment_1_state_space {
 			samples_original_numFeatures_splotdist[i] = new ProblemGenerator(Integer.toString(numFeatures), numFeatures)
 					.setBranchingFactor(ProblemGenerator.SPLOT_BRANCHING_FACTOR)
 					.setTreeConstraintDistribution(ProblemGenerator.SPLOT_TCTDISTRIBUTION)
-					.setCTCRatio(ProblemGenerator.SPLOT_CTC_RATIO).setIRs(1);
+					.setCTCRatio(ProblemGenerator.SPLOT_CTC_RATIO);//.setIRs(1);
 		}
 
 		boolean[][] runningalgorithms_original_numFeatures_splotdist = new boolean[][] { allAlgorithms, allAlgorithms,

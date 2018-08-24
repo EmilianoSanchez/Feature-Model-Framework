@@ -89,7 +89,7 @@ public class Experiment_1 {
 			samples_original_numFeatures_splotdist[i] = new ProblemGenerator(Integer.toString(numFeatures), numFeatures)
 					.setBranchingFactor(ProblemGenerator.SPLOT_BRANCHING_FACTOR)
 					.setTreeConstraintDistribution(ProblemGenerator.SPLOT_TCTDISTRIBUTION)
-					.setCTCRatio(ProblemGenerator.SPLOT_CTC_RATIO).setIRs(1);
+					.setCTCRatio(ProblemGenerator.SPLOT_CTC_RATIO);//.setIRs(1);
 		}
 
 		boolean[][] runningalgorithms_original_numFeatures_splotdist = new boolean[][] { allAlgorithms, allAlgorithms,
